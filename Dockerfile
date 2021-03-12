@@ -1,7 +1,7 @@
 FROM ruby:2.6.3-alpine
 # Ubuntu
 #RUN apt-get update -qq && apt-get install -y nodejs yarn postgresql-client postgresql-dev
-RUN apt-get update -qq &&  apt-get install -y sqlite3 libsqlite3-dev
+# RUN apt-get update -qq &&  apt-get install -y sqlite3 libsqlite3-dev
 # Alpine
 RUN apk update && apk add nodejs yarn postgresql-client postgresql-dev tzdata build-base
 RUN mkdir /myapp
