@@ -13,9 +13,9 @@ RUN bundle install --deployment --without development test
 # compile assets
 COPY Rakefile .
 COPY bin bin
-COPY .browserslistrc .
-COPY postcss.config.js .
-COPY babel.config.js .
+# COPY .browserslistrc .
+# COPY postcss.config.js .
+# COPY babel.config.js .
 COPY config config
 COPY app/assets app/assets
 COPY app/javascript app/javascript
