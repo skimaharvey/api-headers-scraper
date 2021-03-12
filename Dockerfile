@@ -7,9 +7,9 @@ COPY Gemfile .
 COPY Gemfile.lock .
 RUN bundle install --deployment --without development test
 # install npm packages
-COPY package.json .
-COPY yarn.lock .
-RUN yarn install --frozen-lockfile
+# COPY package.json .
+# COPY yarn.lock .
+# RUN yarn install --frozen-lockfile
 # compile assets
 COPY Rakefile .
 COPY bin bin
