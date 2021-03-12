@@ -23,8 +23,8 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  host: srv-captain--railsdb-db
-  database: railsdb-db
-  username: <%= ENV['POSTGRES_USER'] %>
-  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  host: srv-captain--scrapthem-postgres-db
+  database: scrapthem-postgres-db
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
   port: 5432
