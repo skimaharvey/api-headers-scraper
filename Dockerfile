@@ -16,9 +16,9 @@ COPY bin bin
 # COPY .browserslistrc .
 # COPY postcss.config.js .
 # COPY babel.config.js .
-COPY config config
-COPY app/assets app/assets
-COPY app/javascript app/javascript
+# COPY config config
+# COPY app/assets app/assets
+# COPY app/javascript app/javascript
 # Assets, to fix missing secret key issue during building
 RUN SECRET_KEY_BASE=dumb bundle exec rails assets:precompile
 FROM ruby:2.6.3-alpine
