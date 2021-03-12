@@ -21,4 +21,6 @@ ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 80
 # Start the main process.
 WORKDIR /myapp
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+# CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+
+CMD ["bundle", "exec", "rails", "server", "-p", "4000", "--pid", "tmp/pids/server2.pid"]
