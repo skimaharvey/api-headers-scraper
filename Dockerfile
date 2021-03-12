@@ -2,7 +2,7 @@ FROM ruby:2.6.3-alpine
 # Ubuntu
 # RUN apt-get update -qq && apt-get install -y nodejs sqlite3 yarn postgresql-client 
 # Alpine
-RUN apk update && apk add nodejs yarn postgresql-client postgresql-dev tzdata build-base sqlite3
+RUN apk update && apk add nodejs yarn postgresql-client postgresql-dev tzdata build-base sqlite-dev
 RUN mkdir /myapp
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
