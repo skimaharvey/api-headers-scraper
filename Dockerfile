@@ -22,4 +22,4 @@ EXPOSE 80
 # Start the main process.
 WORKDIR /myapp
 
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
