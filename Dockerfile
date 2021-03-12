@@ -23,6 +23,6 @@ EXPOSE 80
 WORKDIR /myapp
 # CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
 
-# CMD ["bundle", "exec", "rails", "server", "-p", "4000", "--pid", "tmp/pids/server2.pid"]
+CMD ["bundle", "exec", "rails", "server", "-p", "4000", "--pid", "tmp/pids/server2.pid"]
  
  #bundle exec rails server -p 4000 --pid tmp/pids/server2.pid
