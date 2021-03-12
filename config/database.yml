@@ -21,8 +21,10 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
+  adapter: postgresql
+  encoding: unicode
   host: srv-captain--railsdb-db
-  database: api_production
+  database: railsdb-db
   username: <%= ENV['POSTGRES_USER'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] %>
+  port: 5432
