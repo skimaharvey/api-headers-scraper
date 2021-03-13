@@ -1,5 +1,5 @@
 class ScrapingSessionsController < ApplicationController
-    def scrape_reservit
+    def scraper
         hotel_reservation_code = params["hotel_reservation_code"]
         authorization_code = params["authorization_code"]
         cookie = params["cookie"]

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   post '/prices', to: 'prices#create'
   post '/destroy_hotel_prices', to: 'prices#destroy_hotel_prices'
   #scraper routes
-  post '/scrape_reservit', to: 'scraping_sessions#scrape_reservit'
+  post '/scraper', to: 'scraping_sessions#scraper'
   #hotels routes
   post '/new_hotel', to: 'hotels#create'
   post '/update_hotel', to: 'hotels#update'
