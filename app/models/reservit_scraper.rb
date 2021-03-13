@@ -7,13 +7,15 @@ class ReservitScraper < ApplicationRecord
            }[0]['id']
            @room_id
         else 
-            room_existence = RoomCategory.all.select{|roomCat| roomCat.name == room_name}
-            if !room_existence.empty?
-                @room_id = room_existence[0].id
-            else
-                new_room_cat = RoomCategory.create!(name: room_name, hotel_id: @hotel_id, room_code: room_code, number_of_units: @n_units)
-                @room_id = new_room_cat.id
-            end
+            # room_existence = RoomCategory.all.select{|roomCat| roomCat.name == room_name}
+            # if !room_existence.empty?
+            #     if Pre
+            #         @room_id = room_existence[0].id
+            #     end
+            # else
+            new_room_cat = RoomCategory.create!(name: room_name, hotel_id: @hotel_id, room_code: room_code, number_of_units: @n_units)
+            @room_id = new_room_cat.id
+            # end
         end
     end
 

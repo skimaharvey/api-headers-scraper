@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   #prices routes
   get '/prices', to: 'prices#index'
   post '/prices', to: 'prices#create'
+  post '/destroy_hotel_prices', to: 'prices#destroy_hotel_prices'
   #scraper routes
   post '/scrape_reservit', to: 'scraping_sessions#scrape_reservit'
   #hotels routes

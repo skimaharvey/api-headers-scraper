@@ -6,7 +6,7 @@ class PricesController < ApplicationController
   def create
     @price = Price.new(price: params["price"], available: params["available"], n_of_units_available: params["n_of_units_available"])
     if @price.save 
-      render json: @price
+      render json: @price, status: 200
     else 
       render json: {error: 'not working'}, status: 400
     end
@@ -15,7 +15,9 @@ class PricesController < ApplicationController
   def update
   end
 
-  def destroy
+  def destroy_hotel_prices
+    Price.where(hotel_id: params["hotel_id"]).destroy_all 
+    render json: {message: "Sucess"}, status: 200
   end
 
   def index
