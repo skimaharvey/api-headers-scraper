@@ -4,7 +4,7 @@ class PricesController < ApplicationController
   end
 
   def create
-    @price = Price.new(price: params[:price], available: params[:available], n_of_units_available: params[:n_of_units_available])
+    @price = Price.new(price: params["price"], available: params["available"], n_of_units_available: params["n_of_units_available"])
     if @price.save 
       render json: @price
     else 

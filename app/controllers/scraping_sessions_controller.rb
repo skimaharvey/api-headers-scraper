@@ -1,7 +1,8 @@
 class ScrapingSessionsController < ApplicationController
     def scrape_reservit
         
-        @hotel_reservation_code = params[:hotel_reservation_code]
+        @hotel_reservation_code = params["hotel_reservation_code"]
+        puts "hotel reservation code #{@hotel_reservation_code}"
         @hotel_id = Hotel.find_by(hotel_reservation_code: @hotel_reservation_code.to_i).id
         @scraping_session = ScrapingSession.create!(date: Time.now, hotel_id: @hotel_id)
         DateOfPrice.for_the_next_90_days
@@ -53,6 +54,7 @@ class ScrapingSessionsController < ApplicationController
         end
         
         urls.each_with_index{|url, index|
+        puts "UUUUURRRRRLLL: #{url}"
         begin
             @current_url = url
             response = HTTParty.get(url, 
@@ -61,15 +63,19 @@ class ScrapingSessionsController < ApplicationController
                         'Authorization' => authorization_code
                         } 
             )
-            @room_categories_arr = []
-            @room_categories = RoomCategory.where(hotel_id: @hotel_id).map {|room_cat| 
-                @room_categories_arr << room_cat.room_code
-                tempHash = {}
-                tempHash['code'] = room_cat.room_code
-                tempHash['id'] = room_cat.id
-                tempHash
-            }
 
+            @room_categories_arr = []
+            hotel_rooms_cats = RoomCategory.where(hotel_id: @hotel_id)
+            puts "rooms cast #{hotel_rooms_cats.length}"
+            unless hotel_rooms_cats.nil?
+                @room_categories = hotel_rooms_cats.map {|room_cat| 
+                    @room_categories_arr << room_cat.room_code
+                    tempHash = {}
+                    tempHash['code'] = room_cat.room_code
+                    tempHash['id'] = room_cat.id
+                    tempHash
+                }
+            end
             if response["errors"]
                 puts "hotel is fully booked on #{dates_arr[index][:id].to_s}"
                 @room_categories.each{|room_cat|
@@ -79,7 +85,7 @@ class ScrapingSessionsController < ApplicationController
                     )
                 }  
             else 
-                puts "date_id : #{dates_arr[index][:id]}"
+        
                 response["datas"]["rooms"].map {|obj|
                     @n_units = obj["rates"].map{|obj| obj["numberOfUnits"]}.max.to_i
                     room_cat_name = obj["type"]["categoryName"]

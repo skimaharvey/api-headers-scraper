@@ -26,3 +26,4 @@ WORKDIR /myapp
 CMD ["bundle", "exec", "rails", "server","-p", "5000", "--pid", "tmp/pids/server241f231.pid"]
  
  #bundle exec rails server -p 4000 --pid tmp/pids/server2.pid
+ #bundle exec tail -f log/production.log
