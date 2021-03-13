@@ -1,6 +1,6 @@
 class ReservitScraper < ApplicationRecord
 
-    def self.check_if_room_type_exits(room_code, room_name)
+    def self.check_if_room_type_exits(room_code, room_name, room_type_name)
         if @room_categories_arr.include? room_code
            @room_id = @room_categories.select{|room_obj|
                room_obj["code"] == room_code 
@@ -13,7 +13,8 @@ class ReservitScraper < ApplicationRecord
             #         @room_id = room_existence[0].id
             #     end
             # else
-            new_room_cat = RoomCategory.create!(name: room_name, hotel_id: @hotel_id, room_code: room_code, number_of_units: @n_units)
+            new_room_cat = RoomCategory.create!(name: room_name, hotel_id: @hotel_id, 
+            room_code: room_code, number_of_units: @n_units, room_type_name: room_type_name)
             @room_id = new_room_cat.id
             # end
         end
@@ -100,10 +101,11 @@ class ReservitScraper < ApplicationRecord
                 response["datas"]["rooms"].map {|obj|
                     @n_units = obj["rates"].map{|obj| obj["numberOfUnits"]}.max.to_i
                     room_cat_name = obj["type"]["categoryName"]
+                    room_type_name = obj["type"]["typeName"]
                     @price = obj["rates"].map{|obj| obj["price"]["amountAfterTax"]}.min.to_i
                     puts "nb chambre: #{@n_units.to_s}, type de chambre: #{room_cat_name}, price: #{@price.to_s}"
                     room_type = obj["rates"][0]["typeCode"].match(/^.*(?=(\-))/).to_s.to_i
-                    ReservitScraper.check_if_room_type_exits(room_type, room_cat_name)
+                    ReservitScraper.check_if_room_type_exits(room_type, room_cat_name, room_type_name)
                     ReservitScraper.check_if_room_type_already_recorded(dates_arr[index][:id])
                 }
             end
