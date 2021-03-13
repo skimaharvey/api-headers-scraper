@@ -7,15 +7,20 @@ class ReservitScraper < ApplicationRecord
            }[0]['id']
            @room_id
         else 
-            new_room_cat = RoomCategory.create!(name: room_name, hotel_id: @hotel_id, room_code: room_code, number_of_units: @n_units)
-            @room_id = new_room_cat.id
+            room_existence = RoomCategory.all.select{|roomCat| roomCat.name == room_name}
+            if !room_existence.empty?
+                @room_id = room_existence[0].id
+            else
+                new_room_cat = RoomCategory.create!(name: room_name, hotel_id: @hotel_id, room_code: room_code, number_of_units: @n_units)
+                @room_id = new_room_cat.id
+            end
         end
     end
 
     def self.check_if_room_type_already_recorded(date_id)
         #some rooms have more than one price (for example triple rooms) but we just want the cheapest option
         price_for_room_code = Price.where(scraping_session_id: @scraping_session.id, hotel_id: 
-            @hotel_id, room_category_id: @room_id,  date_of_price_id:3
+            @hotel_id, room_category_id: @room_id,  date_of_price_id: date_id
         )
         if price_for_room_code.present?
             unless price_for_room_code[0].price > @price 
@@ -59,7 +64,6 @@ class ReservitScraper < ApplicationRecord
 
         
         urls.each_with_index{|url, index|
-        puts "UUUUURRRRRLLL: #{url}"
         begin
             @current_url = url
             response = HTTParty.get(url, 
