@@ -27,3 +27,4 @@ CMD ["bundle", "exec", "rails", "server","-p", "5000", "--pid", "tmp/pids/server
  
  #bundle exec rails server -p 4000 --pid tmp/pids/server2.pid
  #bundle exec tail -f log/production.log
+ #ssh root@68.183.72.66  
