@@ -28,8 +28,8 @@ class HotelsController < ApplicationController
             #             },
             # )
             # print response
-            # authorization_code = response["authorization_code"]
-            # cookie = response["cookie"]
+            # authorization_code = response[:authorization_code]
+            # cookie = response[:cookie]
             authorization_code = "Bearer 54320272473da4f130342c16ebe9b0e929eec8cc"
             cookie = "JSESSIONID=C6BE1A6239E0ADEED347A6C845D3B108"
             # create rooms
