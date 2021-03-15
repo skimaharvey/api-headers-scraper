@@ -171,7 +171,7 @@ class ReservitScraper < ApplicationRecord
         dates_arr.each_with_index{|date, index|
             urls << "https://secure.reservit.com/front2-0-12385/booking.do?step=2&nbroom=1&specialMode=default&hotelid=#{@hotel_reservation_code}&m=booking&langcode=FR&custid=2&currency=EUR&resetCookies=1&partid=0&fromStep=step2&fromDate=#{date[:date]}&toDate=#{dates_plus_one_arr[index]}&roomID=1&nbNight=1&nbRooms=1&numAdult(1)=2&numChild(1)=0&agesWithRoomID(1)=&id=2"
         }
-        
+        print urls
         urls.each_with_index{|url, index|
         # begin
             print url
