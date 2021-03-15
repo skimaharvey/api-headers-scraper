@@ -35,7 +35,7 @@ class HotelsController < ApplicationController
             # create rooms
             ReservitScraper.create_rooms_categories(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
             #fetch availabilities
-            ReservitScraper.launch_scraper(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
+            # ReservitScraper.launch_scraper(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
         end
         render json: {"hotel_id": @hotel}, status: 200
         # rescue => error
