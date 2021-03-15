@@ -28,10 +28,10 @@ class HotelsController < ApplicationController
                         },
             )
             print response
-            authorization_code = response["authorization_code"]
-            cookie = response["cookie"]
-            # authorization_code = "Bearer 9f911766a7e9ab388eea6e80df5361999c3cb0ed"
-            # cookie = "JSESSIONID=1E74AE306C080C6D93E25EC497C98E2A"
+            # authorization_code = response["authorization_code"]
+            # cookie = response["cookie"]
+            authorization_code = "Bearer 9f911766a7e9ab388eea6e80df5361999c3cb0ed"
+            cookie = "JSESSIONID=1E74AE306C080C6D93E25EC497C98E2A"
             # create rooms
             ReservitScraper.create_rooms_categories(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
             #fetch availabilities
