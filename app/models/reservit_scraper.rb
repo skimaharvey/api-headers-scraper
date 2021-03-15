@@ -37,11 +37,11 @@ class ReservitScraper < ApplicationRecord
     end
 
 
-    def self.launch_scraper(hotel_reservation_code, authorization_code, cookie)
+    def self.launch_scraper(hotel_reservation_code, authorization_code, cookie, hotel_id)
         # @hotel_reservation_code = params["hotel_reservation_code"]
         @hotel_reservation_code = hotel_reservation_code
         puts "hotel reservation code #{@hotel_reservation_code}"
-        @hotel_id = Hotel.find_by(hotel_reservation_code: @hotel_reservation_code.to_i).id
+        @hotel_id = hotel_id
         @scraping_session = ScrapingSession.create!(date: Time.now, hotel_id: @hotel_id)
         DateOfPrice.for_the_next_90_days
         all_dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
@@ -105,7 +105,7 @@ class ReservitScraper < ApplicationRecord
                     ReservitScraper.check_if_room_type_already_recorded(dates_arr[index][:id])
                     room_type
                 }
-                #rooms not available for this specific date
+                #find rooms not available for this specific date
                 rooms_not_available = all_rooms_codes - actual_rooms 
                 rooms_not_available.each{|room_code| 
                     Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: all_rooms_categories[room_code], n_of_units_available: 0,
