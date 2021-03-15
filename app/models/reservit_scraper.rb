@@ -155,11 +155,11 @@ class ReservitScraper < ApplicationRecord
         @room_categories_arr = []
         hotel_rooms_cats = RoomCategory.where(hotel_id: @hotel_id).map{|room_cat| room_cat.room_code}
 
-        all_rooms_categories = {}
-        all_rooms_codes =  RoomCategory.where(hotel_id: @hotel_id).map{|room_cat|
-            all_rooms_categories[room_cat.room_code] = room_cat.id
-            room_cat.code
-        }
+        # all_rooms_categories = {}
+        # all_rooms_codes =  RoomCategory.where(hotel_id: @hotel_id).map{|room_cat|
+        #     all_rooms_categories[room_cat.room_code] = room_cat.id
+        #     room_cat.code
+        # }
         
         dates_arr = []
         dates_plus_one_arr = []
