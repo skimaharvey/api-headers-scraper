@@ -151,7 +151,7 @@ class ReservitScraper < ApplicationRecord
         @hotel_reservation_code = hotel_reservation_code
         @hotel_id = hotel_id
         DateOfPrice.for_the_next_90_days
-        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(90)
+        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
         @room_categories_arr = []
         hotel_rooms_cats = RoomCategory.where(hotel_id: @hotel_id).map{|room_cat| room_cat.room_code}
 
@@ -173,7 +173,8 @@ class ReservitScraper < ApplicationRecord
         }
         
         urls.each_with_index{|url, index|
-        begin
+        # begin
+            print url
             @current_url = url
             response = HTTParty.get(url, 
             :headers => { 'Accept' =>  'application/json',
@@ -191,19 +192,20 @@ class ReservitScraper < ApplicationRecord
                     @n_units = obj["rates"].map{|obj| obj["numberOfUnits"]}.max.to_i
                     room_cat_name = obj["type"]["categoryName"]
                     room_type_name = obj["type"]["typeName"]
+                    #get room id 
                     room_type = obj["rates"][0]["typeCode"].match(/^.*(?=(\-))/).to_s.to_i
                     ReservitScraper.create_if_room_type_exits(room_type, room_cat_name, room_type_name, @n_units, @hotel_id)
                     room_type
                 }
             end
             sleep 1
-        rescue HTTParty::Error
-            fromDate = @current_url.match(/\A?fromdate=[^&]+&*/).slice!("fromDate").slice("&")
-            ScrapingError.create(hotel_id: @hotel_id, scraping_session_id:
-            @scraping_session.id, url_date: fromDate
-            )
-            next
-        end
+        # rescue HTTParty::Error
+        #     fromDate = @current_url.match(/\A?fromdate=[^&]+&*/).slice!("fromDate").slice("&")
+        #     ScrapingError.create(hotel_id: @hotel_id, scraping_session_id:
+        #     @scraping_session.id, url_date: fromDate
+        #     )
+        #     next
+        # end
         }
 
     end

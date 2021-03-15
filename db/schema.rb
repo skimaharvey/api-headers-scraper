@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_14_081847) do
+ActiveRecord::Schema.define(version: 2021_03_15_124631) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.datetime "date"
@@ -90,6 +90,11 @@ ActiveRecord::Schema.define(version: 2021_03_14_081847) do
     t.datetime "updated_at", null: false
     t.integer "hotel_id"
     t.index ["hotel_id"], name: "index_scraping_sessions_on_hotel_id"
+  end
+
+  create_table "synxis_scrapers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
