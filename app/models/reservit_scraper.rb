@@ -75,20 +75,19 @@ class ReservitScraper < ApplicationRecord
 
             @room_categories_arr = []
             hotel_rooms_cats = RoomCategory.where(hotel_id: @hotel_id).map{|room_cat| {"room_code": room_cat.room_code, "id": room_cat.id}}
-            puts "rooms cast #{hotel_rooms_cats.length}"
             unless hotel_rooms_cats.nil?
                 @room_categories = hotel_rooms_cats.map {|room_cat| 
-                    @room_categories_arr << room_cat["room_code"]
+                    @room_categories_arr << room_cat[:room_code]
                     tempHash = {}
-                    tempHash['code'] = room_cat["room_code"]
-                    tempHash['id'] = room_cat["id"]
+                    tempHash['code'] = room_cat[:room_code]
+                    tempHash['id'] = room_cat[:id]
                     tempHash
                 }
             end
             if response["errors"]
                 puts "hotel is fully booked on #{dates_arr[index][:id].to_s}"
                 @room_categories.each{|room_cat|
-                    print room_cat
+                   
                     Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: room_cat["id"], n_of_units_available: 0,
                         date_of_price_id: dates_arr[index][:id], scraping_session_id: @scraping_session.id, available: false
                     )
