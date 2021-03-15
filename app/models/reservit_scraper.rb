@@ -74,13 +74,13 @@ class ReservitScraper < ApplicationRecord
             )
 
             @room_categories_arr = []
-            hotel_rooms_cats = RoomCategory.where(hotel_id: @hotel_id).map{|room_cat| room_cat.room_code}
+            hotel_rooms_cats = RoomCategory.where(hotel_id: @hotel_id).map{|room_cat| {"room_code" : room_cat.room_code, "id": room_cat.id}}
             puts "rooms cast #{hotel_rooms_cats.length}"
             unless hotel_rooms_cats.nil?
                 @room_categories = hotel_rooms_cats.map {|room_cat| 
-                    @room_categories_arr << room_cat
+                    @room_categories_arr << room_cat.room_code
                     tempHash = {}
-                    tempHash['code'] = room_cat
+                    tempHash['code'] = room_cat.room_code
                     tempHash['id'] = room_cat.id
                     tempHash
                 }
