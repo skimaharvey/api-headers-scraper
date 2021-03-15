@@ -44,7 +44,7 @@ class ReservitScraper < ApplicationRecord
         @hotel_id = Hotel.find_by(hotel_reservation_code: @hotel_reservation_code.to_i).id
         @scraping_session = ScrapingSession.create!(date: Time.now, hotel_id: @hotel_id)
         DateOfPrice.for_the_next_90_days
-        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(2)
+        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
 
         all_rooms_categories = {}
         all_rooms_codes =  RoomCategory.where(hotel_id: hotel_id).map{|room_cat|
