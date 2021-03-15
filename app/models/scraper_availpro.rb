@@ -4,10 +4,10 @@ class ScraperAvailpro < ApplicationRecord
         # hotel_id = 2
         @room_cats_ids = {}
         @room_categories_arr = RoomCategory.where(hotel_id: hotel_id).each{|room_cat|
-            @room_cats_ids[room_cat.code] = room_cat.id
+            @room_cats_ids[room_cat.room_code] = room_cat.id
             room_cat.room_code
         }
-        
+        scraping_session = ScrapingSession.create(hotel_id: hotel_id)
         all_dates = DateOfPrice.where('date >= ?', Date.today ).first(7)
         dates_arr = []
         dates_plus_one_arr = []
@@ -31,20 +31,22 @@ class ScraperAvailpro < ApplicationRecord
                 puts "fully booked on date id: #{date[:date]}"
                 @room_cats_ids.map{|key,value|
                     Price.create!(price: -1, hotel_id: hotel_id, room_category_id: value,
-                    date_of_price_id: date[:id], n_of_units_available: 0, available: false)
+                    date_of_price_id: date[:id], n_of_units_available: 0, available: false, 
+                    scraping_session_id: scraping_session.id)
                 }
             else
                 response["data"]["rooms"].map { |obj|
                     room_id = @room_cats_ids[obj['roomId']].to_i
                     room_name = @room_cats_ids[obj['name']]
-                    ScraperAvailpro.check_if_room_type_exits(room_id, room_name, hotel_id)
+                    quantity = obj["rates"][0]["availability"].to_i
+                    ScraperAvailpro.check_if_room_type_exits(room_id, room_name, hotel_id, quantity)
                     price = obj["rates"].map{|rateObj|
                             rateObj["price"].to_i
                             }.min
-                    quantity = obj["rates"][0]["availability"].to_i
                     puts "price: #{price}, room cat: #{room_id}"
                     Price.create!(price: price, hotel_id: hotel_id, room_category_id: room_id,
-                    date_of_price_id: date[:id], n_of_units_available: quantity, available: true)
+                    date_of_price_id: date[:id], n_of_units_available: quantity, available: true,
+                    scraping_session_id: scraping_session.id)
                 }
             end
             sleep 1
@@ -73,7 +75,7 @@ class ScraperAvailpro < ApplicationRecord
     def self.create_room_categories(hotel_id, url, verification_token,cookie)
         @room_cats_ids = {}
         @room_categories_arr = RoomCategory.where(hotel_id: hotel_id).each{|room_cat|
-            @room_cats_ids[room_cat.code] = room_cat.id
+            @room_cats_ids[room_cat.room_code] = room_cat.id
             room_cat.room_code
         }
 
