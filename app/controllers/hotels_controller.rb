@@ -33,9 +33,9 @@ class HotelsController < ApplicationController
             authorization_code = "Bearer 54320272473da4f130342c16ebe9b0e929eec8cc"
             cookie = "JSESSIONID=C6BE1A6239E0ADEED347A6C845D3B108"
             # create rooms
-            # ReservitScraper.create_rooms_categories(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
+            ReservitScraper.create_rooms_categories(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
             #fetch availabilities
-            ReservitScraper.launch_scraper(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
+            # ReservitScraper.launch_scraper(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
         end
         render json: {"hotel_id": @hotel}, status: 200
         # rescue => error
