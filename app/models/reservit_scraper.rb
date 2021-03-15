@@ -125,7 +125,7 @@ class ReservitScraper < ApplicationRecord
 
     end
 
-    def self.create_if_room_type_exits(room_code, authorization_code, cookie, n_units, hotel_id)
+    def self.create_if_room_type_exits(room_code, room_name, room_type_name, n_units, hotel_id)
         if @room_categories_arr.include? room_code
             specific_room_cat = RoomCategory.where(room_code: room_code, hotel_id: hotel_id)[0]
             if specific_room_cat.number_of_units < n_units 
@@ -151,7 +151,7 @@ class ReservitScraper < ApplicationRecord
         @hotel_reservation_code = hotel_reservation_code
         @hotel_id = hotel_id
         DateOfPrice.for_the_next_90_days
-        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
+        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(45)
         @room_categories_arr = []
         hotel_rooms_cats = RoomCategory.where(hotel_id: @hotel_id).map{|room_cat| room_cat.room_code}
 
@@ -169,9 +169,10 @@ class ReservitScraper < ApplicationRecord
         }
         urls = []
         dates_arr.each_with_index{|date, index|
-            urls << "https://secure.reservit.com/front2-0-12385/booking.do?step=2&nbroom=1&specialMode=default&hotelid=#{@hotel_reservation_code}&m=booking&langcode=FR&custid=2&currency=EUR&resetCookies=1&partid=0&fromStep=step2&fromDate=#{date["date"]}&toDate=#{dates_plus_one_arr[index]}&roomID=1&nbNight=1&nbRooms=1&numAdult(1)=2&numChild(1)=0&agesWithRoomID(1)=&id=2"
+            urls << "https://secure.reservit.com/front2-0-12385/booking.do?step=2&nbroom=1&specialMode=default&hotelid=#{@hotel_reservation_code}&m=booking&langcode=FR&custid=2&currency=EUR&resetCookies=1&partid=0&fromStep=step2&fromDate=#{date[:date]}&toDate=#{dates_plus_one_arr[index]}&roomID=1&nbNight=1&nbRooms=1&numAdult(1)=2&numChild(1)=0&agesWithRoomID(1)=&id=2"
         }
- 
+        # print "cookie: #{cookie}" 
+        # print authorization_code
         urls.each_with_index{|url, index|
         # begin
             @current_url = url
@@ -181,11 +182,11 @@ class ReservitScraper < ApplicationRecord
                         'Authorization' => authorization_code
                         } 
             )
-
+            # print response
             if response["errors"]
                 puts "hotel is fully booked on #{dates_arr[index][:id].to_s}"
             else 
-        
+               
                 actual_rooms = response["datas"]["rooms"].map {|obj|
                     @n_units = obj["rates"].map{|obj| obj["numberOfUnits"]}.max.to_i
                     room_cat_name = obj["type"]["categoryName"]
