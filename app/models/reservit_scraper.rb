@@ -151,7 +151,7 @@ class ReservitScraper < ApplicationRecord
         @hotel_reservation_code = hotel_reservation_code
         @hotel_id = hotel_id
         DateOfPrice.for_the_next_90_days
-        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(45)
+        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(10)
         @room_categories_arr = []
         hotel_rooms_cats = RoomCategory.where(hotel_id: @hotel_id).map{|room_cat| room_cat.room_code}
 
