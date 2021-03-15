@@ -88,6 +88,7 @@ class ReservitScraper < ApplicationRecord
             if response["errors"]
                 puts "hotel is fully booked on #{dates_arr[index][:id].to_s}"
                 @room_categories.each{|room_cat|
+                    print room_cat
                     Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: room_cat["id"], n_of_units_available: 0,
                         date_of_price_id: dates_arr[index][:id], scraping_session_id: @scraping_session.id, available: false
                     )
