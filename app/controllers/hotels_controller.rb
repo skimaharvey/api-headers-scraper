@@ -33,7 +33,7 @@ class HotelsController < ApplicationController
             authorization_code = "Bearer 9f911766a7e9ab388eea6e80df5361999c3cb0ed"
             cookie = "JSESSIONID=1E74AE306C080C6D93E25EC497C98E2A"
             # create rooms
-            ReservitScraper.create_rooms_categories(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
+            # ReservitScraper.create_rooms_categories(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
             #fetch availabilities
             ReservitScraper.launch_scraper(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
         end
