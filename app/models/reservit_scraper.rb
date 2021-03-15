@@ -49,7 +49,7 @@ class ReservitScraper < ApplicationRecord
         all_rooms_categories = {}
         all_rooms_codes =  RoomCategory.where(hotel_id: hotel_id).map{|room_cat|
             all_rooms_categories[room_cat.room_code] = room_cat.id
-            room_cat.code
+            room_cat.room_code
         }
         
         dates_arr = []
