@@ -21,16 +21,16 @@ class HotelsController < ApplicationController
         when 'reservit'
             #TODO create api that just gets the correct headers 
             print "FETCHING HEADERS"
-            # response = HTTParty.post('https://scrapthem.com/reservit_headers/', 
-            #     :body => { :hotel_name => params["name"], 
-            #             :hotel_reservation_code => params["hotel_reservation_code"], 
-            #             :hotel_id => @hotel.id, 
-            #             },
-            # )
-            # authorization_code = response["authorization_code"]
-            # cookie = response["cookie"]
-            authorization_code = params["authorization_code"]
-            cookie = params["cookie"]
+            response = HTTParty.post('https://scrapthem.com/reservit_headers/', 
+                :body => { :hotel_name => params["name"], 
+                        :hotel_reservation_code => params["hotel_reservation_code"], 
+                        :hotel_id => @hotel.id, 
+                        },
+            )
+            authorization_code = response["authorization_code"]
+            cookie = response["cookie"]
+            # authorization_code = params["authorization_code"]
+            # cookie = params["cookie"]
             #create rooms
             ReservitScraper.create_rooms_categories(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
             #fetch availabilities
