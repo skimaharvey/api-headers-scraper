@@ -32,7 +32,7 @@ class ScrapingSessionsController < ApplicationController
         case reservation_manager_name
             when 'reservit'
                 ReservitScraper.launch_scraper(hotel_reservation_code, 
-                authorization_code, cookie)
+                authorization_code, cookie, hotel_id)
                 # ReservitScraper.test 
                 render json: {"message": "#{hotel.name} was successfully updated"}, status: 200
         end
