@@ -1,5 +1,5 @@
 class PricesController < ApplicationController
-  # before_action :create
+  before_action :require_login
   def new
   end
 

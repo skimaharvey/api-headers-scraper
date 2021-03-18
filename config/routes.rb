@@ -9,5 +9,8 @@ Rails.application.routes.draw do
   #hotels routes
   post '/new_hotel', to: 'hotels#create'
   post '/update_hotel', to: 'hotels#update'
+  #users routes 
+  post '/new_user', to: 'users#create'
+  post '/login', to: 'login#create'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
