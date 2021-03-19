@@ -8,7 +8,7 @@ class ScraperAvailpro < ApplicationRecord
             room_cat.room_code
         }
         scraping_session = ScrapingSession.create(hotel_id: hotel_id)
-        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(7)
+        all_dates = DateOfPrice.where('date >= ?', Date.today ).first(90)
         dates_arr = []
         dates_plus_one_arr = []
         all_dates.each {|date|
