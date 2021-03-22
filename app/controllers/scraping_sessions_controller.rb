@@ -6,7 +6,7 @@ class ScrapingSessionsController < ApplicationController
             hc.hotel_id
         }
         user_hotel_id = Hotel.find_by(user_id: params["user_id"]).id
-        all_ids = competitors.push(user_hotel_id)
+        all_ids = competitors_ids.push(user_hotel_id)
         all_ids.each{|hotel_id|
             hotel = Hotel.find(hotel_id)
             reservation_manager_name = ReservationManager.find(hotel.reservation_manager_id).name
