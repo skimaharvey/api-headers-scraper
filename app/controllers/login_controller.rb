@@ -28,6 +28,7 @@ class LoginController < ApplicationController
           comptetitors_prices: comptetitors_prices,
           hotels: hotels,
           dates: dates,
+          user_id: user.id,
           room_categories: room_categories
         }, status: :created 
       end
@@ -59,7 +60,8 @@ class LoginController < ApplicationController
             comptetitors_prices: comptetitors_prices,
             hotels: hotels,
             dates: dates,
-            room_categories: room_categories
+            room_categories: room_categories,
+            user_id: user.id
           }, status: :created 
         else 
           render json: { errors: "Sorry, incorrect username or password"  }, status: :unprocessable_entity
