@@ -19,7 +19,7 @@ class ScraperJob < ApplicationJob
                 :body => { "hotel_id": hotel_id, "hotel_name": hotel.name,
                     "hotel_reservation_code": hotel.hotel_reservation_code},
                 )
-                render json: {"message": "#{hotel.name} headers were fetched"}, status: 200
+                # render json: {"message": "#{hotel.name} headers were fetched"}, status: 200
             when "availpro"
                 #TODO MAKE A SMALL PYTHON API THAT WILL GET THE HEADERS INFOS
                 verification_token = 'XCcHwTI90iFQWqKPL_HDTklGdTZQGn_tevHDaksEtECd0NY-jYtH9iaUQg5TbbU-mSC3t2LFcq_UyzKM6YdPhBEya8eN_Bq273kgAsjleRo1'

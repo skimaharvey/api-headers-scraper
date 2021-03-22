@@ -3,7 +3,7 @@ class ScrapingSessionsController < ApplicationController
     def launch_competitors_scraper 
         #scrape competitors hotel + user hotel 
         ScraperJob.perform_later(params["user_id"])
-        render json: {message: "Scrapers starting"}
+        render json: {"message": "Scrapers starting"}
     end
 
     def scraper_without_headers
