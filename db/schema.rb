@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_18_143320) do
+ActiveRecord::Schema.define(version: 2021_03_22_130406) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.datetime "date"
@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 2021_03_18_143320) do
     t.string "username"
     t.string "password_digest"
     t.string "email"
+    t.string "token"
   end
 
 end
