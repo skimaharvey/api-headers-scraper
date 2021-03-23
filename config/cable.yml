@@ -7,5 +7,5 @@ test:
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://:scrap1234@srv-captain--scraper-redis:6379/1" } %>
+  url: <%=ENV['REDIS_URL']%>
   channel_prefix: srv-captain--scraper-redis
