@@ -3,7 +3,7 @@ Rails.application.configure do
 
   # Code is not reloaded between requests.
   config.cache_classes = true
-  # config.action_cable.disable_request_forgery_protection = true
+  config.action_cable.disable_request_forgery_protection = true
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
@@ -44,7 +44,7 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  config.action_cable.url = 'ws://rails-api.mycaprover.scrapthem.com/cable'
+  config.action_cable.url = 'wss://rails-api.mycaprover.scrapthem.com/cable'
   config.action_cable.allowed_request_origins = /(.*?)/
   # config.action_cable.allowed_request_origins = /(\.dev$)|^localhost$/
 
