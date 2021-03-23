@@ -30,9 +30,10 @@ class ReservitScraper < ApplicationRecord
                 price_for_room_code[0].update(price: @price)
             end
         else
-            Price.create!(price: @price, hotel_id: @hotel_id, room_category_id: @room_id, n_of_units_available: @n_units,
+            new_price = Price.create!(price: @price, hotel_id: @hotel_id, room_category_id: @room_id, n_of_units_available: @n_units,
             date_of_price_id: date_id, scraping_session_id: @scraping_session.id, available: true
             )
+            HotelsChannel.broadcast_to @hotel, new_price
         end
     end
 
@@ -41,6 +42,7 @@ class ReservitScraper < ApplicationRecord
         # @hotel_reservation_code = params["hotel_reservation_code"]
         @hotel_reservation_code = hotel_reservation_code
         puts "hotel reservation code #{@hotel_reservation_code}"
+        @hotel = Hotel.find(hotel_id)
         @hotel_id = hotel_id
         @scraping_session = ScrapingSession.create!(date: Time.now, hotel_id: @hotel_id)
         DateOfPrice.for_the_next_90_days
@@ -88,9 +90,11 @@ class ReservitScraper < ApplicationRecord
                 puts "hotel is fully booked on #{dates_arr[index][:id].to_s}"
                 @room_categories.each{|room_cat|
                    
-                    Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: room_cat["id"], n_of_units_available: 0,
+                    new_price = Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: room_cat["id"], n_of_units_available: 0,
                         date_of_price_id: dates_arr[index][:id], scraping_session_id: @scraping_session.id, available: false
                     )
+                    HotelsChannel.broadcast_to @hotel, new_price
+
                 }  
             else 
         
@@ -108,9 +112,10 @@ class ReservitScraper < ApplicationRecord
                 #find rooms not available for this specific date
                 rooms_not_available = all_rooms_codes - actual_rooms 
                 rooms_not_available.each{|room_code| 
-                    Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: all_rooms_categories[room_code], n_of_units_available: 0,
+                    new_price = Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: all_rooms_categories[room_code], n_of_units_available: 0,
                         date_of_price_id: dates_arr[index][:id], scraping_session_id: @scraping_session.id, available: false
                     )
+                    HotelsChannel.broadcast_to @hotel, new_price
                 }
             end
             sleep 1

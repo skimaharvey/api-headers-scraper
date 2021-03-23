@@ -14,5 +14,7 @@ Rails.application.routes.draw do
   post '/new_user', to: 'users#create'
   post '/login', to: 'login#create'
   post 'check_if_valid_session', to: 'login#check_if_valid_session'
+  #action cable
+  mount ActionCable.server => '/cable'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -3,6 +3,7 @@ class ScraperAvailpro < ApplicationRecord
     def self.launch_scraper(hotel_id, url, verification_token,cookie)
         # hotel_id = 2
         @room_cats_ids = {}
+        @hotel = Hotel.find(hotel_id)
         @room_categories_arr = RoomCategory.where(hotel_id: hotel_id).each{|room_cat|
             @room_cats_ids[room_cat.room_code] = room_cat.id
             room_cat.room_code
@@ -30,9 +31,10 @@ class ScraperAvailpro < ApplicationRecord
             if response["success"] == false 
                 puts "fully booked on date id: #{date[:date]}"
                 @room_cats_ids.map{|key,value|
-                    Price.create!(price: -1, hotel_id: hotel_id, room_category_id: value,
+                    new_price = Price.create!(price: -1, hotel_id: hotel_id, room_category_id: value,
                     date_of_price_id: date[:id], n_of_units_available: 0, available: false, 
                     scraping_session_id: scraping_session.id)
+                    HotelsChannel.broadcast_to @hotel, new_price
                 }
             else
                 response["data"]["rooms"].map { |obj|
@@ -44,9 +46,10 @@ class ScraperAvailpro < ApplicationRecord
                             rateObj["price"].to_i
                             }.min
                     puts "price: #{price}, room cat: #{room_id}"
-                    Price.create!(price: price, hotel_id: hotel_id, room_category_id: room_id,
+                    new_price = Price.create!(price: price, hotel_id: hotel_id, room_category_id: room_id,
                     date_of_price_id: date[:id], n_of_units_available: quantity, available: true,
                     scraping_session_id: scraping_session.id)
+                    HotelsChannel.broadcast_to @hotel, new_price
                 }
             end
             sleep 1
