@@ -33,7 +33,7 @@ class ReservitScraper < ApplicationRecord
             new_price = Price.create!(price: @price, hotel_id: @hotel_id, room_category_id: @room_id, n_of_units_available: @n_units,
             date_of_price_id: date_id, scraping_session_id: @scraping_session.id, available: true
             )
-            HotelsChannel.broadcast_to @hotel, new_price
+            # HotelsChannel.broadcast_to @hotel, new_price
         end
     end
 
@@ -93,7 +93,7 @@ class ReservitScraper < ApplicationRecord
                     new_price = Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: room_cat["id"], n_of_units_available: 0,
                         date_of_price_id: dates_arr[index][:id], scraping_session_id: @scraping_session.id, available: false
                     )
-                    HotelsChannel.broadcast_to @hotel, new_price
+                    # HotelsChannel.broadcast_to @hotel, new_price
 
                 }  
             else 
@@ -115,7 +115,7 @@ class ReservitScraper < ApplicationRecord
                     new_price = Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: all_rooms_categories[room_code], n_of_units_available: 0,
                         date_of_price_id: dates_arr[index][:id], scraping_session_id: @scraping_session.id, available: false
                     )
-                    HotelsChannel.broadcast_to @hotel, new_price
+                    # HotelsChannel.broadcast_to @hotel, new_price
                 }
             end
             sleep 1
@@ -127,7 +127,7 @@ class ReservitScraper < ApplicationRecord
             next
         end
         }
-
+        ReservitScraper.send_scraping_session_to_client(@hotel_id)
     end
 
     def self.create_if_room_type_exits(room_code, room_name, room_type_name, n_units, hotel_id)
@@ -211,6 +211,11 @@ class ReservitScraper < ApplicationRecord
         #     next
         # end
         }
+    end
 
+    def self.send_scraping_session_to_client(hotel_id)
+        last_session = ScrapingSession.where(hotel_id: hotel_id).last.id
+        last_prices = Price.where(scraping_session_id: last_session)
+        HotelsChannel.broadcast_to @hotel, last_prices
     end
 end

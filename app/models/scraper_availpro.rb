@@ -34,7 +34,7 @@ class ScraperAvailpro < ApplicationRecord
                     new_price = Price.create!(price: -1, hotel_id: hotel_id, room_category_id: value,
                     date_of_price_id: date[:id], n_of_units_available: 0, available: false, 
                     scraping_session_id: scraping_session.id)
-                    HotelsChannel.broadcast_to @hotel, new_price
+                    # HotelsChannel.broadcast_to @hotel, new_price
                 }
             else
                 response["data"]["rooms"].map { |obj|
@@ -49,11 +49,12 @@ class ScraperAvailpro < ApplicationRecord
                     new_price = Price.create!(price: price, hotel_id: hotel_id, room_category_id: room_id,
                     date_of_price_id: date[:id], n_of_units_available: quantity, available: true,
                     scraping_session_id: scraping_session.id)
-                    HotelsChannel.broadcast_to @hotel, new_price
+                    # HotelsChannel.broadcast_to @hotel, new_price
                 }
             end
             sleep 1
         }
+        ScraperAvailpro.send_scraping_session_to_client(hotel_id)
     end 
 
     def self.check_if_room_type_exits(room_code, room_name, hotel_id, quantity)
@@ -113,5 +114,11 @@ class ScraperAvailpro < ApplicationRecord
             end
             sleep 1
         }
+    end
+    def self.send_scraping_session_to_client(hotel_id)
+        hotel = Hotel.find(hotel_id)
+        last_session = ScrapingSession.where(hotel_id: hotel_id).last.id
+        last_prices = Price.where(scraping_session_id: last_session)
+        HotelsChannel.broadcast_to hotel, last_prices
     end
 end
