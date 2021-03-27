@@ -14,7 +14,7 @@ class ScrapingSessionsController < ApplicationController
             when 'reservit'
                 #send request to django header scraper
                 hotel_reservation_code = hotel.hotel_reservation_code
-                HTTParty.post('https://scrapthem.com/scraper/', 
+                HTTParty.post('https://django-scraper.caprover.scrapthem.com/scraper/', 
                 :body => { "hotel_id": hotel_id, "hotel_name": hotel.name,
                     "hotel_reservation_code": hotel_reservation_code},
                 )

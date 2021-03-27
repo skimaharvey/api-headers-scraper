@@ -9,8 +9,8 @@ class ApplicationController < ActionController::API
     end
   
     def hmac_secret
-    #   ENV["API_SECRET_KEY"]
-        "somernadomwapikey"
+      ENV["API_SECRET_KEY_DECODE"]
+        # "somernadomwapikey"
     end
   
     def client_has_valid_token?

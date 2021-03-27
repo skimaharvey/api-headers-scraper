@@ -44,7 +44,8 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  config.action_cable.url = 'wss://rails-api.mycaprover.scrapthem.com/cable'
+  config.action_cable.url = 'wss://new-rails-api.caprover.scrapthem.com/cable'
+  # config.action_cable.url = 'wss://rails-api.mycaprover.scrapthem.com/cable'
   config.action_cable.allowed_request_origins = /(.*?)/
   # config.action_cable.allowed_request_origins = /(\.dev$)|^localhost$/
 

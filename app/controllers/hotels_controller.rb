@@ -21,7 +21,7 @@ class HotelsController < ApplicationController
         when 'reservit'
             #TODO create api that just gets the correct headers 
             print "FETCHING HEADERS"
-            response = HTTParty.post('https://scrapthem.com/reservit_headers/', 
+            response = HTTParty.post('https://django-scraper.caprover.scrapthem.com/reservit_headers/', 
                 :body => { :hotel_name => params["name"], 
                         :hotel_reservation_code => params["hotel_reservation_code"], 
                         :hotel_id => @hotel.id, 
