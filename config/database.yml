@@ -25,6 +25,7 @@ production:
   encoding: unicode
   # host: srv-captain--scrapthem-postgres-db
   host: <%= ENV['DB_HOST'] %>
+  username: <%= ENV['DB_USERNAME'] %>
   database: <%= ENV['DB_NAME'] %>
   password: <%= ENV['DB_PASSWORD'] %>
   port: 5432
