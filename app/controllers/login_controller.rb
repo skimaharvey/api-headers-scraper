@@ -42,27 +42,31 @@ class LoginController < ApplicationController
           dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
           room_categories = {}
           user_hotel = user.hotel
-          last_user_hotel_scraping_session = user_hotel.scraping_sessions.last
-          user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session)
-          user.hotel.room_categories.each{|room_cat|
-            room_categories[room_cat.id] = room_cat
-          }
-          comptetitors_prices = user.hotels.map{|hotel|
-            last_hotel_scraping_session = hotel.scraping_sessions.last
-            room_cats = hotel.room_categories
-            room_cats.each{|room_cat|
+          if !user_hotel.scraping_sessions.empty?
+            last_user_hotel_scraping_session = user_hotel.scraping_sessions.last
+            user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session)
+            user.hotel.room_categories.each{|room_cat|
               room_categories[room_cat.id] = room_cat
             }
-            hotel.prices.where(scraping_session_id: last_hotel_scraping_session)
-          }
-          render json: { token: token(user.id), 
-            user_hotel_prices: user_hotel_prices, 
-            comptetitors_prices: comptetitors_prices,
-            hotels: hotels,
-            dates: dates,
-            room_categories: room_categories,
-            user_id: user.id
-          }, status: :created 
+            comptetitors_prices = user.hotels.map{|hotel|
+              last_hotel_scraping_session = hotel.scraping_sessions.last
+              room_cats = hotel.room_categories
+              room_cats.each{|room_cat|
+                room_categories[room_cat.id] = room_cat
+              }
+              hotel.prices.where(scraping_session_id: last_hotel_scraping_session)
+            }
+            render json: { token: token(user.id), 
+              user_hotel_prices: user_hotel_prices, 
+              comptetitors_prices: comptetitors_prices,
+              hotels: hotels,
+              dates: dates,
+              room_categories: room_categories,
+              user_id: user.id
+            }, status: :created 
+          else
+            rend json: {"message": "session created"}
+          end
         else 
           render json: { errors: "Sorry, incorrect username or password"  }, status: :unprocessable_entity
         end 
