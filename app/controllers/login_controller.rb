@@ -65,7 +65,10 @@ class LoginController < ApplicationController
               user_id: user.id
             }, status: :created 
           else
-            rend json: {"message": "session created"}
+            render json: {
+                          token: token(user.id),
+                          user_id: user.id
+                        }
           end
         else 
           render json: { errors: "Sorry, incorrect username or password"  }, status: :unprocessable_entity
