@@ -33,7 +33,7 @@ class ScraperAvailpro < ApplicationRecord
                 @room_cats_ids.map{|key,value|
                     new_price = Price.create!(price: -1, hotel_id: hotel_id, room_category_id: value,
                     date_of_price_id: date[:id], n_of_units_available: 0, available: false, 
-                    scraping_session_id: scraping_session.id)
+                    scraping_session_id: scraping_session.id, ota_price: -1)
                     # HotelsChannel.broadcast_to @hotel, new_price
                 }
             else

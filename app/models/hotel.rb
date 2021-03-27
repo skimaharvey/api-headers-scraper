@@ -6,4 +6,5 @@ class Hotel < ApplicationRecord
     belongs_to :user, optional: true
     has_many :hotel_competitors, dependent:  :destroy
     has_one :hotel_owner, dependent:  :destroy
+    has_many :ota_coefficients, dependent: :destroy
 end

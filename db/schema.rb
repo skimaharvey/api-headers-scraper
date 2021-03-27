@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_23_214425) do
+ActiveRecord::Schema.define(version: 2021_03_25_130212) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.datetime "date"
@@ -49,6 +49,15 @@ ActiveRecord::Schema.define(version: 2021_03_23_214425) do
     t.index ["user_id"], name: "index_hotels_on_user_id"
   end
 
+  create_table "ota_coefficients", force: :cascade do |t|
+    t.boolean "is_coefficient"
+    t.float "coefficient_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "hotel_id"
+    t.index ["hotel_id"], name: "index_ota_coefficients_on_hotel_id"
+  end
+
   create_table "prices", force: :cascade do |t|
     t.integer "price"
     t.boolean "available"
@@ -59,6 +68,7 @@ ActiveRecord::Schema.define(version: 2021_03_23_214425) do
     t.integer "date_of_price_id"
     t.integer "room_category_id"
     t.integer "scraping_session_id"
+    t.integer "ota_price"
     t.index ["date_of_price_id"], name: "index_prices_on_date_of_price_id"
     t.index ["hotel_id"], name: "index_prices_on_hotel_id"
     t.index ["room_category_id"], name: "index_prices_on_room_category_id"
