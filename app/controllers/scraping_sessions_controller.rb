@@ -14,11 +14,17 @@ class ScrapingSessionsController < ApplicationController
             when 'reservit'
                 #send request to django header scraper
                 hotel_reservation_code = hotel.hotel_reservation_code
-                HTTParty.post('https://django-scraper.caprover.scrapthem.com/scraper/', 
+                response = HTTParty.post('https://django-scraper.caprover.scrapthem.com/scraper/', 
                 :body => { "hotel_id": hotel_id, "hotel_name": hotel.name,
                     "hotel_reservation_code": hotel_reservation_code},
                 )
-                render json: {"message": "#{hotel.name} headers were fetched"}, status: 200
+                if response.cookie != 'error'
+                    ReservitScraper.launch_scraper(hotel_reservation_code, 
+                    response.authorization_code, response.cookie, hotel_id)
+                    render json: {"message": "#{hotel.name} headers were fetched"}, status: 200
+                else
+                    render json: {"error": "#{hotel.name} were not fectched because headers scraper returned an error"}, status: 500
+                end                
             when "availpro"
                 #TODO MAKE A SMALL PYTHON API THAT WILL GET THE HEADERS INFOS
                 verification_token = 'XCcHwTI90iFQWqKPL_HDTklGdTZQGn_tevHDaksEtECd0NY-jYtH9iaUQg5TbbU-mSC3t2LFcq_UyzKM6YdPhBEya8eN_Bq273kgAsjleRo1'
