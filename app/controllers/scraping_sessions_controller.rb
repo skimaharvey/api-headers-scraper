@@ -18,9 +18,9 @@ class ScrapingSessionsController < ApplicationController
                 :body => { "hotel_id": hotel_id, "hotel_name": hotel.name,
                     "hotel_reservation_code": hotel_reservation_code},
                 )
-                if response.cookie != 'error'
+                if response['cookie'] != 'error'
                     ReservitScraper.launch_scraper(hotel_reservation_code, 
-                    response.authorization_code, response.cookie, hotel_id)
+                    response['authorization_code'], response['cookie'], hotel_id)
                     render json: {"message": "#{hotel.name} headers were fetched"}, status: 200
                 else
                     render json: {"error": "#{hotel.name} were not fectched because headers scraper returned an error"}, status: 500
