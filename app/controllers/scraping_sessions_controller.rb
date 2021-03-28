@@ -6,6 +6,7 @@ class ScrapingSessionsController < ApplicationController
         render json: {"message": "Scrapers starting"}
     end
 
+    #this is the method that is called when we dont have the appropriate headers in order to make the calls
     def scraper_without_headers
         hotel_id = params["hotel_id"]
         hotel = Hotel.find(hotel_id)
@@ -19,10 +20,11 @@ class ScrapingSessionsController < ApplicationController
                     "hotel_reservation_code": hotel_reservation_code},
                 )
                 if response['cookie'] != 'error'
-                    ReservitScraper.launch_scraper(hotel_reservation_code, 
-                    response['authorization_code'], response['cookie'], hotel_id)
-                    render json: {"message": "#{hotel.name} headers were fetched"}, status: 200
+                    # ReservitScraper.launch_scraper(hotel_reservation_code, 
+                    # response['authorization_code'], response['cookie'], hotel_id)
+                    render json: {"message": "#{hotel.name} headers are going to be fetched"}, status: 200
                 else
+                    #CREATE A ACTIVE JOB MODEL THAT WILL CALL X AMOUNT OF TIME IF HEADERS ARE INCORRECTLY FETCHED
                     render json: {"error": "#{hotel.name} were not fectched because headers scraper returned an error"}, status: 500
                 end                
             when "availpro"
@@ -34,6 +36,7 @@ class ScrapingSessionsController < ApplicationController
         end
     end
 
+    #this is the method that django scraper will call once it has fetched the appropriate headers
     def scraper_with_headers
         hotel_reservation_code = params["hotel_reservation_code"]
         hotel_id = params["hotel_id"]
