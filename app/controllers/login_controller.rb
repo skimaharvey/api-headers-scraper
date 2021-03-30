@@ -64,11 +64,12 @@ class LoginController < ApplicationController
             #all_otas_prices for last scraping session 
             last_scraping_sessions_ids = []
             scraping_sessions_ids = all_hotels_ids.map{|hotel_id|
-              if(ScrapingSession.where(hotel_id: hotel_id, is_ota_type: true).length > 0
+              if ScrapingSession.where(hotel_id: hotel_id, is_ota_type: true).length > 0
                 ScrapingSession.where(hotel_id: hotel_id, is_ota_type: true).last
               end
             }
             all_otas_prices = OtaPrice.where(scraping_session_id: scraping_sessions_ids)
+
             render json: { token: token(user.id), 
               user_hotel_prices: user_hotel_prices, 
               comptetitors_prices: comptetitors_prices,
