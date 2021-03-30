@@ -4,7 +4,7 @@ class TripadvisorRequestsController < ApplicationController
             hotel_name: params["hotel_name"],
             proxy: params["proxy"],
             hotel_id: params["hotel_id"],
-            request_body: params['request_body']
+            request_body: params['request_body'],
             date: params["date"]
         )
         if trip.save
