@@ -47,7 +47,6 @@ class ScrapingSessionsController < ApplicationController
         case reservation_manager_name
             when 'reservit'
                 ReservitJob.perform_later(hotel_reservation_code, hotel_id, authorization_code, cookie)
-            end
         end
     end
 end
