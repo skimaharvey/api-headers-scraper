@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_081825) do
+ActiveRecord::Schema.define(version: 2021_03_30_095003) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.datetime "date"
@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_081825) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "hotel_id"
+    t.string "date"
     t.index ["hotel_id"], name: "index_tripadvisor_requests_on_hotel_id"
   end
 

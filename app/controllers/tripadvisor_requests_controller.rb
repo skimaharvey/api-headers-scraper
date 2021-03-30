@@ -5,6 +5,7 @@ class TripadvisorRequestsController < ApplicationController
             proxy: params["proxy"],
             hotel_id: params["hotel_id"],
             request_body: params['request_body']
+            date: params["date"]
         )
         if trip.save
             render json: {"message": "Tripadvisor request created"}, status: 200
