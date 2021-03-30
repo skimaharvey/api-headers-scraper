@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_095003) do
+ActiveRecord::Schema.define(version: 2021_03_30_213047) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.datetime "date"
@@ -56,6 +56,25 @@ ActiveRecord::Schema.define(version: 2021_03_30_095003) do
     t.datetime "updated_at", null: false
     t.integer "hotel_id"
     t.index ["hotel_id"], name: "index_ota_coefficients_on_hotel_id"
+  end
+
+  create_table "ota_prices", force: :cascade do |t|
+    t.integer "price"
+    t.string "provider"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "hotel_id"
+    t.integer "date_of_price_id"
+    t.integer "scraping_session_id_id"
+    t.boolean "available"
+    t.index ["date_of_price_id"], name: "index_ota_prices_on_date_of_price_id"
+    t.index ["hotel_id"], name: "index_ota_prices_on_hotel_id"
+    t.index ["scraping_session_id_id"], name: "index_ota_prices_on_scraping_session_id_id"
+  end
+
+  create_table "ota_scrapers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "prices", force: :cascade do |t|
@@ -110,6 +129,11 @@ ActiveRecord::Schema.define(version: 2021_03_30_095003) do
     t.integer "date_of_price_id"
     t.integer "scraping_session_id"
     t.string "url_date"
+    t.text "error"
+    t.boolean "price_type_ota"
+    t.boolean "price_type_hotel"
+    t.text "response"
+    t.boolean "available"
     t.index ["date_of_price_id"], name: "index_scraping_errors_on_date_of_price_id"
     t.index ["hotel_id"], name: "index_scraping_errors_on_hotel_id"
     t.index ["scraping_session_id"], name: "index_scraping_errors_on_scraping_session_id"
@@ -120,6 +144,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_095003) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "hotel_id"
+    t.boolean "is_ota_type"
     t.index ["hotel_id"], name: "index_scraping_sessions_on_hotel_id"
   end
 

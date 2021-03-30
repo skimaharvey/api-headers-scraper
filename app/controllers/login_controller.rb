@@ -42,13 +42,18 @@ class LoginController < ApplicationController
           dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
           room_categories = {}
           user_hotel = user.hotel
+          all_hotels_ids = [] 
+          all_hotels_ids.push(user_hotel.id)
+
           if !user_hotel.scraping_sessions.empty?
+            
             last_user_hotel_scraping_session = user_hotel.scraping_sessions.last
             user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session)
             user.hotel.room_categories.each{|room_cat|
               room_categories[room_cat.id] = room_cat
             }
             comptetitors_prices = user.hotels.map{|hotel|
+              all_hotels_ids.push(hotel.id)
               last_hotel_scraping_session = hotel.scraping_sessions.last
               room_cats = hotel.room_categories
               room_cats.each{|room_cat|
@@ -56,13 +61,22 @@ class LoginController < ApplicationController
               }
               hotel.prices.where(scraping_session_id: last_hotel_scraping_session)
             }
+            #all_otas_prices for last scraping session 
+            last_scraping_sessions_ids = []
+            scraping_sessions_ids = all_hotels_ids.map{|hotel_id|
+              if(ScrapingSession.where(hotel_id: hotel_id, is_ota_type: true).length > 0
+                ScrapingSession.where(hotel_id: hotel_id, is_ota_type: true).last
+              end
+            }
+            all_otas_prices = OtaPrice.where(scraping_session_id: scraping_sessions_ids)
             render json: { token: token(user.id), 
               user_hotel_prices: user_hotel_prices, 
               comptetitors_prices: comptetitors_prices,
               hotels: hotels,
               dates: dates,
               room_categories: room_categories,
-              user_id: user.id
+              user_id: user.id,
+              ota_prices: all_otas_prices
             }, status: :created 
           else
             render json: {

@@ -1,7 +1,8 @@
 class DateOfPrice < ApplicationRecord
     has_many :prices, dependent:  :destroy
     has_many :scraping_errors, dependent:  :destroy
-
+    has_many :ota_prices, dependent: :destroy
+    
     def self.for_the_next_90_days
         todays_date = Date.today
         90.times { 
