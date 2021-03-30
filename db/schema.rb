@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_25_130212) do
+ActiveRecord::Schema.define(version: 2021_03_30_081825) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.datetime "date"
@@ -126,6 +126,16 @@ ActiveRecord::Schema.define(version: 2021_03_25_130212) do
   create_table "synxis_scrapers", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "tripadvisor_requests", force: :cascade do |t|
+    t.text "request_body"
+    t.string "proxy"
+    t.string "hotel_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "hotel_id"
+    t.index ["hotel_id"], name: "index_tripadvisor_requests_on_hotel_id"
   end
 
   create_table "users", force: :cascade do |t|

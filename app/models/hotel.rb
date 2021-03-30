@@ -7,4 +7,5 @@ class Hotel < ApplicationRecord
     has_many :hotel_competitors, dependent:  :destroy
     has_one :hotel_owner, dependent:  :destroy
     has_many :ota_coefficients, dependent: :destroy
+    has_one :tripadvisor_request, dependent: :destroy
 end

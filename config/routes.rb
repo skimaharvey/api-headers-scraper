@@ -16,5 +16,7 @@ Rails.application.routes.draw do
   post 'check_if_valid_session', to: 'login#check_if_valid_session'
   #action cable
   mount ActionCable.server => '/cable'
+  #tripadvisor route 
+  post '/create_trip_request', to: "tripadvisor_requests#create"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
