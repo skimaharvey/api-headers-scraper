@@ -10,7 +10,7 @@ class LoginController < ApplicationController
         user = User.find(user_id)
         room_categories = {}
         user_hotel = user.hotel
-        last_user_hotel_scraping_session = user_hotel.scraping_sessions.last
+        last_user_hotel_scraping_session =  user_hotel.scraping_sessions.where(is_ota_type: nil).last
         user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session)
         user.hotel.room_categories.each{|room_cat|
           room_categories[room_cat.id] = room_cat

@@ -13,6 +13,7 @@ class OtaScrapersController < ApplicationController
     end
 
     def scraper_specific_hotel
+        # OtaScraperJob.perform_later(params["hotel_id"])
         OtaScraperJob.perform_later(params["hotel_id"])
         render json: {"message": "Fetching ota's prices"}
     end

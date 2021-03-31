@@ -27,18 +27,20 @@ class OtaScraper < ApplicationRecord
                 counter = 0
                 date_of_price_id = dateObj.id
                 #TODO FETCH API THAT RANDOMIZES PROXY
+
                 HTTParty::Basement.http_proxy('107.150.65.166', 7777, 'maxvia', '141614')
                 while !complete_response && counter < 3
                     print('fetching availabilities')
+                    # puts(formatted_request_body)
                     response = HTTParty.post(post_url, 
                         :body => formatted_request_body,
                         :headers => {"content-type": "application/json"}
                     )
-                    
+                    # puts(response)
                     response_status = response.keys.select{|key| key.include?("fields_complete_")}[0]
-                    puts (response_status)
+                    # puts (response_status)
                     response_body = response.keys.select{|key| key.include?("chevronOffers_complete_hiddenOffers_textLinkOffers_urgencyAlert_offerFields_data_status")}[0]
-                    puts (response_body)
+                    # puts (response_body)
                     if response[response_status].values[0]["body"]["complete"] == true
                         complete_response = true
                         all_offers = response[response_body].values[0]["body"]["textLinkOffers"]
