@@ -35,7 +35,7 @@ class LoginController < ApplicationController
           end
         }
         
-        all_otas_prices = OtaPrice.where(scraping_session_id_id: scraping_sessions_ids)
+        all_otas_prices = OtaPrice.where(scraping_session_id: scraping_sessions_ids)
         
         render json: { token: token(user.id), 
           user_hotel_prices: user_hotel_prices, 
@@ -84,7 +84,7 @@ class LoginController < ApplicationController
               end
             }
             
-            all_otas_prices = OtaPrice.where(scraping_session_id_id: scraping_sessions_ids)
+            all_otas_prices = OtaPrice.where(scraping_session_id: scraping_sessions_ids)
             
             render json: { token: token(user.id), 
               user_hotel_prices: user_hotel_prices, 
