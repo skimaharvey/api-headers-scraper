@@ -39,6 +39,10 @@ class ReservitWorker
     end
 
   def perform(hotel_reservation_code, hotel_id, authorization_code, cookie)
+    PROXIES_ARR = ['107.150.65.179', '209.58.157.45', '107.150.64.7', '191.102.167.205', '107.150.65.166',
+    '191.102.167.239', '107.150.64.25', '191.102.167.102', '209.58.157.66', '191.102.167.55'
+    ]
+    HTTParty::Basement.http_proxy(PROXIES_ARR.sample, 7777, 'maxvia', '141614')
     # @hotel_reservation_code = params["hotel_reservation_code"]
     @hotel_reservation_code = hotel_reservation_code
     puts "hotel reservation code #{@hotel_reservation_code}"
@@ -61,6 +65,7 @@ class ReservitWorker
         dates_plus_one_arr << date.date.next_day(1).strftime("%d/%m/%Y")
     }
     urls = []
+
     dates_arr.each_with_index{|date, index|
         urls << "https://secure.reservit.com/front2-0-12385/booking.do?step=2&nbroom=1&specialMode=default&hotelid=#{@hotel_reservation_code}&m=booking&langcode=FR&custid=2&currency=EUR&resetCookies=1&partid=0&fromStep=step2&fromDate=#{date[:date]}&toDate=#{dates_plus_one_arr[index]}&roomID=1&nbNight=1&nbRooms=1&numAdult(1)=2&numChild(1)=0&agesWithRoomID(1)=&id=2"
     }
