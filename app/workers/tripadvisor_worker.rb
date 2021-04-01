@@ -60,11 +60,13 @@ def perform(hotel_id)
                         mini_price = all_prices.min
                         best_offer = offers_prices.select {|obj| obj[:price] == mini_price }[0]
                         OtaPrice.create!(date_of_price_id: date_of_price_id, price: mini_price, 
-                            hotel_id: hotel_id, provider: best_offer[:provider], available: true
+                            hotel_id: hotel_id, provider: best_offer[:provider], available: true,
+                            scraping_session_id: scraping_session.id
                         )  
                     else 
                         OtaPrice.create!(date_of_price_id: date_of_price_id, price: 0, 
-                        hotel_id: hotel_id, provider: "none", available: false
+                        hotel_id: hotel_id, provider: "none", available: false,
+                        scraping_session_id: scraping_session.id
                     )                           
                     end
                 end
