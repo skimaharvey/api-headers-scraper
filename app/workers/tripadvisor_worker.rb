@@ -29,7 +29,7 @@ def perform(hotel_id)
             HTTParty::Basement.http_proxy('107.150.65.166', 7777, 'maxvia', '141614')
             
             while !complete_response && counter < 3
-                print('fetching availabilities')
+                puts("fetching availabilities for: #{dateObj.date.to_s}, hotel_id: #{hotel_id}")
                 # puts(formatted_request_body)
                 response = HTTParty.post(post_url, 
                     :body => formatted_request_body,

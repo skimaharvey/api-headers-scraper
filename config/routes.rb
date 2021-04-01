@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
   #tripadvisor route 
   post '/create_trip_request', to: "tripadvisor_requests#create"
+  post '/fetch_user_otas', to: "tripadvisor_requests#fetch_all_user_otas" 
   #ota scraper routes
   post "/scrape_hotel_ota", to: 'ota_scrapers#scraper_specific_hotel'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

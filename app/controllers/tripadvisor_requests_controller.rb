@@ -13,4 +13,17 @@ class TripadvisorRequestsController < ApplicationController
             render json: {"error": "Error while saving"}, status: 500
         end
     end
+
+    def fetch_all_user_otas 
+        user_id = params["user_id"]
+        competitors_ids = HotelCompetitor.where(user_id: user_id).map{|hc|
+            hc.hotel_id
+        }
+        user_hotel_id = HotelOwner.find_by(user_id: user_id).hotel_id
+        all_ids = competitors_ids.push(user_hotel_id)
+        all_ids.each{|hotel_id|
+            TripadvisorWorker.perform_async(hotel_id)
+        }
+        render json: {"message": "Fetching Ota's prices started"}, status: 200
+    end
 end
