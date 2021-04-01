@@ -15,10 +15,14 @@ class UserHotelsScraperWorker
             when 'reservit'
                 #send request to django header scraper in order to get the requests
                 hotel_reservation_code = hotel.hotel_reservation_code
+                begin
                 HTTParty.post('https://django-scraper.caprover.scrapthem.com/scraper/', 
                 :body => { "hotel_id": hotel_id, "hotel_name": hotel.name,
                     "hotel_reservation_code": hotel.hotel_reservation_code},
                 )
+                rescue
+                  ScrapingError.create(error: "error when fetching the reservit headers", hotel_id: hotel_id)
+                end
                 # render json: {"message": "#{hotel.name} headers were fetched"}, status: 200
             when "availpro"
                 #TODO MAKE A SMALL PYTHON API THAT WILL GET THE HEADERS INFOS
