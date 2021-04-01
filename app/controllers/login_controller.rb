@@ -13,7 +13,7 @@ class LoginController < ApplicationController
         all_hotels_ids = [] 
         all_hotels_ids.push(user_hotel.id)
 
-        last_user_hotel_scraping_session = user_hotel.scraping_sessions.last
+        last_user_hotel_scraping_session = user_hotel.scraping_sessions.where(is_ota_type: nil).last
         user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session)
         user.hotel.room_categories.each{|room_cat|
           room_categories[room_cat.id] = room_cat
@@ -63,7 +63,7 @@ class LoginController < ApplicationController
 
           if !user_hotel.scraping_sessions.empty?
             
-            last_user_hotel_scraping_session = user_hotel.scraping_sessions.last
+            last_user_hotel_scraping_session = user_hotel.scraping_sessions.where(is_ota_type: nil).last
             user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session)
             user.hotel.room_categories.each{|room_cat|
               room_categories[room_cat.id] = room_cat
