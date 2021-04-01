@@ -39,10 +39,9 @@ class ReservitWorker
     end
 
   def perform(hotel_reservation_code, hotel_id, authorization_code, cookie)
-    PROXIES_ARR = ['107.150.65.179', '209.58.157.45', '107.150.64.7', '191.102.167.205', '107.150.65.166',
+    proxies = ['107.150.65.179', '209.58.157.45', '107.150.64.7', '191.102.167.205', '107.150.65.166',
     '191.102.167.239', '107.150.64.25', '191.102.167.102', '209.58.157.66', '191.102.167.55'
     ]
-    HTTParty::Basement.http_proxy(PROXIES_ARR.sample, 7777, 'maxvia', '141614')
     # @hotel_reservation_code = params["hotel_reservation_code"]
     @hotel_reservation_code = hotel_reservation_code
     puts "hotel reservation code #{@hotel_reservation_code}"
@@ -72,6 +71,7 @@ class ReservitWorker
     
     urls.each_with_index{|url, index|
     begin
+        HTTParty::Basement.http_proxy(proxies.sample, 7777, 'maxvia', '141614')
         @current_url = url
         response = HTTParty.get(url, 
         :headers => { 'Accept' =>  'application/json',
