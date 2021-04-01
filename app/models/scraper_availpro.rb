@@ -72,8 +72,7 @@ class ScraperAvailpro < ApplicationRecord
             end
         end
         #get the max quantity for a specific room category 
-
-        
+  
     end
 
     def self.create_room_categories(hotel_id, url, verification_token,cookie)

@@ -7,14 +7,14 @@ class OtaScrapersController < ApplicationController
         all_competitors_ids.push(hotel_user_id)
         
         all_competitors_ids.each{|hotel_id|
-            OtaScraperJob.perform_later(hotel_id)
+            TripadvisorWorker.perform_async(hotel_id)
         }
         render json: {"message": "Fetching all ota's prices"}
     end
 
     def scraper_specific_hotel
-        # OtaScraperJob.perform_later(params["hotel_id"])
-        OtaScraperJob.perform_later(params["hotel_id"])
+        # TripadvisorWorker.perform_later(params["hotel_id"])
+        TripadvisorWorker.perform_async(params["hotel_id"])
         render json: {"message": "Fetching ota's prices"}
     end
 end
