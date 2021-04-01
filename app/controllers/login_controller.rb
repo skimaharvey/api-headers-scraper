@@ -20,11 +20,12 @@ class LoginController < ApplicationController
         }
         comptetitors_prices = user.hotels.map{|hotel|
           all_hotels_ids.push(hotel.id)
-          last_hotel_scraping_session = hotel.scraping_sessions.last
+          last_hotel_scraping_session = hotel.scraping_sessions.where(is_ota_type: nil).last
           room_cats = hotel.room_categories
           room_cats.each{|room_cat|
             room_categories[room_cat.id] = room_cat
           }
+          #SET UP SERIALIZER
           hotel.prices.where(scraping_session_id: last_hotel_scraping_session)
         }
         #all_otas_prices for last scraping session 
@@ -69,7 +70,7 @@ class LoginController < ApplicationController
             }
             comptetitors_prices = user.hotels.map{|hotel|
               all_hotels_ids.push(hotel.id)
-              last_hotel_scraping_session = hotel.scraping_sessions.last
+              last_hotel_scraping_session = hotel.scraping_sessions.where(is_ota_type: nil).last
               room_cats = hotel.room_categories
               room_cats.each{|room_cat|
                 room_categories[room_cat.id] = room_cat
