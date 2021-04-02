@@ -1,6 +1,13 @@
 #delete all pending jobs in sidekiq:
-require 'sidekiq/api'
+
 Sidekiq::Queue.all.each(&:clear)
+
+#see pending jobs sidekiq:
+require 'sidekiq/api'
+scheduled = Sidekiq::ScheduledSet.new.select
+scheduled.map do |job|
+  p job
+end
 
 #follow logs in production:
 bundle exec tail -f log/production.log
