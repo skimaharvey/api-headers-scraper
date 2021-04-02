@@ -1,6 +1,6 @@
 class ReservitWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => false
+#   sidekiq_options :retry => false
 
     def check_if_room_type_exits(room_code, room_name, room_type_name)
         if @room_categories_arr.include? room_code

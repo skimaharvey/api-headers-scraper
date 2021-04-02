@@ -1,0 +1,6 @@
+#delete all pending jobs in sidekiq:
+require 'sidekiq/api'
+Sidekiq::Queue.all.each(&:clear)
+
+#follow logs in production:
+bundle exec tail -f log/production.log

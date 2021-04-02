@@ -1,6 +1,6 @@
 class AvailproWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => false
+#   sidekiq_options :retry => false
   
   def send_scraping_session_to_client(hotel_id)
     hotel = Hotel.find(hotel_id)
