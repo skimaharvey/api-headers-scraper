@@ -20,9 +20,9 @@ def perform(hotel_id)
     all_dates = DateOfPrice.where('date >= ?', Date.today ).first(89)
     post_url = 'https://www.tripadvisor.com/data/1.0/batch'
     
-    eur_usd_rate = HTTParty.get('http://data.fixer.io/api/latest?access_key=b2df67f2dec3a8ff428771e2df049519')
-
-    eur_usd_rate = eur_usd_rate["rates"]["USD"]
+    exchange = HTTParty.get('http://data.fixer.io/api/latest?access_key=b2df67f2dec3a8ff428771e2df049519')
+    eur_usd_rate = exchange["rates"]["USD"]
+    print(eur_usd_rate)
     all_dates.each{|dateObj|
         # begin
             formatted_request_body = request_body_converter(request_body, dateObj.date, formatted_date)
@@ -51,9 +51,9 @@ def perform(hotel_id)
                     all_offers.each{|offerObj|
                         if offerObj["status"] == "AVAILABLE"
                             ota_name = offerObj["data"]["provider"]
-                            perNight = offerObj["data"]["dataAtts"]["data-perNight"].to_i
-                            tax = offerObj["data"]["dataAtts"]["data-taxesValue"].to_i 
-                            price = tax + perNight 
+                            perNight = offerObj["data"]["dataAtts"]["data-perNight"].to_f
+                            tax = offerObj["data"]["dataAtts"]["data-taxesValue"].to_f
+                            price = ((tax + perNight) / eur_usd_rate).to_i
                             offers_prices << { "price": price, "provider": ota_name}
                         end
                     }
@@ -61,7 +61,7 @@ def perform(hotel_id)
                         all_prices = offers_prices.map{|offer|
                             offer[:price]
                         }
-                        mini_price = all_prices.min / eur_usd_rate
+                        mini_price = all_prices.min
                         best_offer = offers_prices.select {|obj| obj[:price] == mini_price }[0]
                         OtaPrice.create!(date_of_price_id: date_of_price_id, price: mini_price, 
                             hotel_id: hotel_id, provider: best_offer[:provider], available: true,
@@ -86,5 +86,5 @@ def perform(hotel_id)
             # next
         # end
     }
-end
+    end
 end
