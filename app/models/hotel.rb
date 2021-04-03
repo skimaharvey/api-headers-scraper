@@ -9,4 +9,5 @@ class Hotel < ApplicationRecord
     has_many :ota_coefficients, dependent: :destroy
     has_one :tripadvisor_request, dependent: :destroy
     has_many :ota_prices, dependent: :destroy
+    has_many :room_equivalences, dependent: :destroy
 end

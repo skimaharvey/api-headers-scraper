@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  is_percentage: false
+  is_addition: false
+
+two:
+  is_percentage: false
+  is_addition: false

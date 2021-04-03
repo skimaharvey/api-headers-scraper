@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   post '/fetch_user_otas', to: "tripadvisor_requests#fetch_all_user_otas" 
   #ota scraper routes
   post "/scrape_hotel_ota", to: 'ota_scrapers#scraper_specific_hotel'
+  #rooms routes
+  post '/room_categories_list', to: 'room_categories#room_categories_list'
 
   mount Sidekiq::Web => '/sidekiq'
 

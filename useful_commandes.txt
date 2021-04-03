@@ -11,3 +11,6 @@ end
 
 #follow logs in production:
 bundle exec tail -f log/production.log
+
+#errors reporting 
+https://sentry.io/
