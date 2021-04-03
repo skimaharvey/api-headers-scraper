@@ -19,6 +19,10 @@ def perform(hotel_id)
     DateOfPrice.for_the_next_90_days
     all_dates = DateOfPrice.where('date >= ?', Date.today ).first(89)
     post_url = 'https://www.tripadvisor.com/data/1.0/batch'
+    
+    eur_usd_rate = HTTParty.get('http://data.fixer.io/api/latest?access_key=b2df67f2dec3a8ff428771e2df049519')
+
+    eur_usd_rate = eur_usd_rate["rates"]["USD"]
     all_dates.each{|dateObj|
         # begin
             formatted_request_body = request_body_converter(request_body, dateObj.date, formatted_date)
@@ -28,7 +32,7 @@ def perform(hotel_id)
             #TODO FETCH API THAT RANDOMIZES PROXY
             HTTParty::Basement.http_proxy('107.150.65.166', 7777, 'maxvia', '141614')
             
-            while !complete_response && counter < 3
+            while !complete_response && counter < 5
                 puts("fetching availabilities for: #{dateObj.date.to_s}, hotel_id: #{hotel_id}")
                 # puts(formatted_request_body)
                 response = HTTParty.post(post_url, 
@@ -57,7 +61,7 @@ def perform(hotel_id)
                         all_prices = offers_prices.map{|offer|
                             offer[:price]
                         }
-                        mini_price = all_prices.min
+                        mini_price = all_prices.min / eur_usd_rate
                         best_offer = offers_prices.select {|obj| obj[:price] == mini_price }[0]
                         OtaPrice.create!(date_of_price_id: date_of_price_id, price: mini_price, 
                             hotel_id: hotel_id, provider: best_offer[:provider], available: true,
