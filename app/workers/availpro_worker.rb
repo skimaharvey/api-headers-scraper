@@ -47,6 +47,9 @@ class AvailproWorker
     ]
 
     dates_arr.each_with_index{|date, index|
+        max_retries = 3
+        times_retried = 0
+        begin
         HTTParty::Basement.http_proxy(proxies.sample, 7777, 'maxvia', '141614')
         response = HTTParty.post(url, 
             :body => { :checkinDate => date[:date], 
@@ -82,6 +85,17 @@ class AvailproWorker
             }
         end
         sleep 1
+        rescue Net::ReadTimeout, Net::OpenTimeout => error
+            if times_retried < max_retries
+            times_retried += 1
+            puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}"
+            retry
+            else
+            puts "ADD SPECIFIC DATE TO WORKER"
+            next
+            #   exit(1)
+            end
+        end
     }
     send_scraping_session_to_client(hotel_id)
   end 

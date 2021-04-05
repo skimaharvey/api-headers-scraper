@@ -27,7 +27,9 @@ def perform(hotel_id)
     '191.102.167.239', '107.150.64.25', '191.102.167.102', '209.58.157.66', '191.102.167.55'
     ]
     all_dates.each{|dateObj|
-        # begin
+        max_retries = 3
+        times_retried = 0
+        begin
             formatted_request_body = request_body_converter(request_body, dateObj.date, formatted_date)
             complete_response = false
             counter = 0
@@ -80,14 +82,17 @@ def perform(hotel_id)
                 sleep 3
                 counter += 1
             end
-        # rescue => e
-        #     print('ERROR IN OTA SCRAPING')
-        #     ScrapingError.create(hotel_id: hotel_id, scraping_session_id:
-        #     scraping_session.id, price_type_ota: true, error: e, date_of_price_id:
-        #     dateObj.id, response: response
-        #     )
-            # next
-        # end
+        rescue Net::ReadTimeout, Net::OpenTimeout => error
+            if times_retried < max_retries
+              times_retried += 1
+              puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}"
+              retry
+            else
+              puts "ADD SPECIFIC DATE TO WORKER"
+              next
+            #   exit(1)
+            end
+        end
     }
     end
 end
