@@ -42,8 +42,12 @@ class AvailproWorker
         dates_plus_one_arr << date.date.next_day(1).strftime("%Y-%m-%d")
     }
 
+    proxies = ['107.150.65.179', '209.58.157.45', '107.150.64.7', '191.102.167.205', '107.150.65.166',
+    '191.102.167.239', '107.150.64.25', '191.102.167.102', '209.58.157.66', '191.102.167.55'
+    ]
 
     dates_arr.each_with_index{|date, index|
+        HTTParty::Basement.http_proxy(proxies.sample, 7777, 'maxvia', '141614')
         response = HTTParty.post(url, 
             :body => { :checkinDate => date[:date], 
                     :checkoutDate => dates_plus_one_arr[index], 

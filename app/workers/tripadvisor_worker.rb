@@ -23,6 +23,9 @@ def perform(hotel_id)
     exchange = HTTParty.get('http://data.fixer.io/api/latest?access_key=b2df67f2dec3a8ff428771e2df049519')
     eur_usd_rate = exchange["rates"]["USD"]
     print(eur_usd_rate)
+    proxies = ['107.150.65.179', '209.58.157.45', '107.150.64.7', '191.102.167.205', '107.150.65.166',
+    '191.102.167.239', '107.150.64.25', '191.102.167.102', '209.58.157.66', '191.102.167.55'
+    ]
     all_dates.each{|dateObj|
         # begin
             formatted_request_body = request_body_converter(request_body, dateObj.date, formatted_date)
@@ -30,9 +33,9 @@ def perform(hotel_id)
             counter = 0
             date_of_price_id = dateObj.id
             #TODO FETCH API THAT RANDOMIZES PROXY
-            HTTParty::Basement.http_proxy('107.150.65.166', 7777, 'maxvia', '141614')
             
             while !complete_response && counter < 5
+                HTTParty::Basement.http_proxy(proxies.sample, 7777, 'maxvia', '141614')
                 puts("fetching availabilities for: #{dateObj.date.to_s}, hotel_id: #{hotel_id}")
                 # puts(formatted_request_body)
                 response = HTTParty.post(post_url, 
