@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   post "/scrape_hotel_ota", to: 'ota_scrapers#scraper_specific_hotel'
   #rooms routes
   post '/room_categories_list', to: 'room_categories#room_categories_list'
+  post '/fetch_rooms_equivalences', to: 'room_categories#fetch_rooms_equivalences'
 
   mount Sidekiq::Web => '/sidekiq'
 

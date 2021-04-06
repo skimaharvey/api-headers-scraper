@@ -15,4 +15,18 @@ class RoomCategoriesController < ApplicationController
             "room_equivalences": room_equivalences
         }
     end
+
+    def fetch_rooms_equivalences 
+        all_rooms_ids = params["allRoomsIds"]
+        tempHash = {}
+        all_equivalences = []
+        
+        all_rooms_ids.map{|id|
+            price_equivalence = RoomCategory.find(id).price_equivalence
+            room_equivalence = RoomCategory.find(id).room_equivalence
+            tempHash[id] = {"price_equivalence" => price_equivalence, "room_equivalence" => room_equivalence}
+            all_equivalences.push(tempHash)
+        }
+        render json: {"rooms_equivalences": tempHash}, status: 200
+    end
 end
