@@ -1,5 +1,6 @@
 class RoomCategory < ApplicationRecord
     has_many :prices, dependent: :destroy
     belongs_to :hotel
-    has_many :room_equivalences, dependent: :destroy
+    has_one :room_equivalence, dependent: :destroy
+    has_one :price_equivalence, through: :room_equivalence
 end

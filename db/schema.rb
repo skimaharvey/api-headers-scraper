@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_081904) do
+ActiveRecord::Schema.define(version: 2021_04_06_154839) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.date "date"
@@ -77,6 +77,13 @@ ActiveRecord::Schema.define(version: 2021_04_06_081904) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "price_equivalences", force: :cascade do |t|
+    t.integer "price_category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+  end
+
   create_table "prices", force: :cascade do |t|
     t.integer "price"
     t.boolean "available"
@@ -123,7 +130,9 @@ ActiveRecord::Schema.define(version: 2021_04_06_081904) do
     t.datetime "updated_at", null: false
     t.integer "hotel_id"
     t.integer "room_category_id"
+    t.integer "price_equivalence_id"
     t.index ["hotel_id"], name: "index_room_equivalences_on_hotel_id"
+    t.index ["price_equivalence_id"], name: "index_room_equivalences_on_price_equivalence_id"
     t.index ["room_category_id"], name: "index_room_equivalences_on_room_category_id"
   end
 
