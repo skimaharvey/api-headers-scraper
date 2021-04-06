@@ -133,7 +133,7 @@ class ReservitWorker
     #     )
     #     next
     # end
-    rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED => error
+    rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET => error
         if times_retried < max_retries
         times_retried += 1
         puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}"
