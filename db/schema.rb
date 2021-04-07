@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_07_123448) do
+ActiveRecord::Schema.define(version: 2021_04_07_130339) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.date "date"
@@ -130,12 +130,12 @@ ActiveRecord::Schema.define(version: 2021_04_07_123448) do
     t.boolean "is_addition"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "hotel_id"
     t.integer "room_category_id"
     t.integer "price_equivalence_id"
-    t.index ["hotel_id"], name: "index_room_equivalences_on_hotel_id"
+    t.integer "user_id"
     t.index ["price_equivalence_id"], name: "index_room_equivalences_on_price_equivalence_id"
     t.index ["room_category_id"], name: "index_room_equivalences_on_room_category_id"
+    t.index ["user_id"], name: "index_room_equivalences_on_user_id"
   end
 
   create_table "scraper_availpros", force: :cascade do |t|
