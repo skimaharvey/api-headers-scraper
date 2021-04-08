@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_07_130339) do
+ActiveRecord::Schema.define(version: 2021_04_08_163857) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.date "date"
@@ -133,6 +133,8 @@ ActiveRecord::Schema.define(version: 2021_04_07_130339) do
     t.integer "room_category_id"
     t.integer "price_equivalence_id"
     t.integer "user_id"
+    t.float "average_price"
+    t.float "median_price"
     t.index ["price_equivalence_id"], name: "index_room_equivalences_on_price_equivalence_id"
     t.index ["room_category_id"], name: "index_room_equivalences_on_room_category_id"
     t.index ["user_id"], name: "index_room_equivalences_on_user_id"
