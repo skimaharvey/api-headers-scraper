@@ -20,3 +20,23 @@ https://fixer.io/quickstart
 
 #proxies
 WWW.Proxy-hub.com 
+
+
+############### PRICES METHODS 
+#calculate median 
+def median(array)
+  return nil if array.empty?
+  sorted = array.sort
+  len = sorted.length
+  (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
+end
+
+#calculate average 
+def average(arr)
+arr.inject{ |sum, el| sum + el }.to_f / arr.size
+end
+
+#arr of price for specific room cat
+Price.where(room_category_id: 38).map{|po| po.price}.delete_if { |i| i == -1 }
+
+##################
