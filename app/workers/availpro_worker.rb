@@ -24,7 +24,7 @@ class AvailproWorker
     }
 
     @new_prices_objs.keys.each{|date_roomid|
-        if @new_prices_objs.has?(date_roomid) && @last_prices_objs.has?(date_roomid)
+        if @new_prices_objs.key?(date_roomid) && @last_prices_objs.key?(date_roomid)
             #change in n_of_units available
             if @new_prices_obj[date_roomid][:n_of_units_available] != @last_prices_objs[date_roomid][:n_of_units_available] 
                 NewReservation.create!(hotel_id: hotel_id, 
@@ -143,8 +143,8 @@ class AvailproWorker
             end
         end
     }
-    scraping_session.update(is_complete: true)
     check_last_scraping_differences(scraping_session, hotel_id)
+    scraping_session.update(is_complete: true)
     send_scraping_session_to_client(hotel_id)
   end 
 end
