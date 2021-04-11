@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_09_072436) do
+ActiveRecord::Schema.define(version: 2021_04_11_202506) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.date "date"
@@ -47,6 +47,33 @@ ActiveRecord::Schema.define(version: 2021_04_09_072436) do
     t.integer "capacity"
     t.index ["reservation_manager_id"], name: "index_hotels_on_reservation_manager_id"
     t.index ["user_id"], name: "index_hotels_on_user_id"
+  end
+
+  create_table "new_prices", force: :cascade do |t|
+    t.integer "room_category_id"
+    t.integer "date_of_price_id"
+    t.integer "old_price"
+    t.integer "new_price"
+    t.integer "n_units"
+    t.integer "hotel_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date_of_price_id"], name: "index_new_prices_on_date_of_price_id"
+    t.index ["hotel_id"], name: "index_new_prices_on_hotel_id"
+    t.index ["room_category_id"], name: "index_new_prices_on_room_category_id"
+  end
+
+  create_table "new_reservations", force: :cascade do |t|
+    t.integer "room_category_id"
+    t.integer "date_of_price_id"
+    t.integer "price"
+    t.integer "n_units"
+    t.integer "hotel_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date_of_price_id"], name: "index_new_reservations_on_date_of_price_id"
+    t.index ["hotel_id"], name: "index_new_reservations_on_hotel_id"
+    t.index ["room_category_id"], name: "index_new_reservations_on_room_category_id"
   end
 
   create_table "ota_coefficients", force: :cascade do |t|
@@ -170,6 +197,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_072436) do
     t.datetime "updated_at", null: false
     t.integer "hotel_id"
     t.boolean "is_ota_type"
+    t.boolean "is_complete"
     t.index ["hotel_id"], name: "index_scraping_sessions_on_hotel_id"
   end
 
