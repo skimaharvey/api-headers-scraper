@@ -26,7 +26,7 @@ class AvailproWorker
     @new_prices_objs.keys.each{|date_roomid|
         if @new_prices_objs.key?(date_roomid) && @last_prices_objs.key?(date_roomid)
             #change in n_of_units available
-            if @new_prices_obj[date_roomid][:n_of_units_available] != @last_prices_objs[date_roomid][:n_of_units_available] 
+            if @new_prices_objs[date_roomid][:n_of_units_available] != @last_prices_objs[date_roomid][:n_of_units_available] 
                 NewReservation.create!(hotel_id: hotel_id, 
                     room_category_id: @new_prices_obj[date_roomid][:room_category_id],
                     date_of_price_id: @new_prices_obj[date_roomid][:date_of_price_id],
@@ -35,7 +35,7 @@ class AvailproWorker
                 )
             end
             #change in price 
-            if @new_prices_obj[date_roomid][:price] != @last_prices_objs[date_roomid][:price] && @new_prices_obj[date_roomid][:price] != -1 || @last_prices_obj[date_roomid][:price] != -1
+            if @new_prices_objs[date_roomid][:price] != @last_prices_objs[date_roomid][:price] && @new_prices_obj[date_roomid][:price] != -1 || @last_prices_obj[date_roomid][:price] != -1
                 NewPrice.create!(hotel_id: hotel_id, 
                     room_category_id: @new_prices_obj[date_roomid][:room_category_id],
                     date_of_price_id: @new_prices_obj[date_roomid][:date_of_price_id],
