@@ -20,7 +20,6 @@ class AvailproWorker
         @last_prices_objs["#{priceObj.date_of_price_id}-#{priceObj.room_category_id}"] = 
             {"price": priceObj.price, "n_of_units_available": priceObj.n_of_units_available,
              "room_category_id": priceObj.room_category_id, "date_of_price_id": priceObj.date_of_price_id,
-             "room_category_id": priceObj.date_of_price_id
             }  
     }
 
@@ -42,7 +41,7 @@ class AvailproWorker
                     date_of_price_id: @last_prices_objs[date_roomid][:date_of_price_id],
                     old_price: @last_prices_objs[date_roomid][:price],
                     new_price: @new_prices_objs[date_roomid][:price],
-                    n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_objs[date_roomid][:n_of_units_available]
+                    n_units: @new_prices_objs[date_roomid][:n_of_units_available]
                 )
             end
         end
