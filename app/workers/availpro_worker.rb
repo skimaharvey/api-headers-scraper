@@ -31,7 +31,7 @@ class AvailproWorker
                     room_category_id: @new_prices_obj[date_roomid][:room_category_id],
                     date_of_price_id: @new_prices_obj[date_roomid][:date_of_price_id],
                     price: @new_prices_obj[date_roomid][:price]?@new_prices_obj[date_roomid][:price]:@last_prices_obj[date_roomid][:price],
-                    n_units: @last_prices_objs[[date_roomid][:n_of_units_available] - @new_prices_obj[date_roomid][:n_of_units_available]
+                    n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_obj[date_roomid][:n_of_units_available]
                 )
             end
             #change in price 
@@ -41,7 +41,7 @@ class AvailproWorker
                     date_of_price_id: @new_prices_obj[date_roomid][:date_of_price_id],
                     old_price: @last_prices_obj[date_roomid][:price],
                     new_price: @new_prices_obj[date_roomid][:price],
-                    n_units: @last_prices_objs[[date_roomid][:n_of_units_available] - @new_prices_obj[date_roomid][:n_of_units_available]
+                    n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_obj[date_roomid][:n_of_units_available]
                 )
             end
         end
