@@ -19,7 +19,8 @@ class AvailproWorker
     all_prices.each{|priceObj|
         @last_prices_objs["#{priceObj.date_of_price_id}-#{priceObj.room_category_id}"] = 
             {"price": priceObj.price, "n_of_units_available": priceObj.n_of_units_available,
-             "room_category_id": priceObj.room_category_id
+             "room_category_id": priceObj.room_category_id, "date_of_price_id": priceObj.date_of_price_id,
+             "room_category_id": priceObj.date_of_price_id
             }  
     }
 
@@ -28,8 +29,8 @@ class AvailproWorker
             #change in n_of_units available
             if @new_prices_objs[date_roomid][:n_of_units_available] != @last_prices_objs[date_roomid][:n_of_units_available] 
                 NewReservation.create!(hotel_id: hotel_id, 
-                    room_category_id: @new_prices_objs[date_roomid][:room_category_id],
-                    date_of_price_id: @new_prices_objs[date_roomid][:date_of_price_id],
+                    room_category_id: @last_prices_objs[date_roomid][:room_category_id],
+                    date_of_price_id: @last_prices_objs[date_roomid][:date_of_price_id],
                     price: @new_prices_objs[date_roomid][:price]? @new_prices_objs[date_roomid][:price]: @last_prices_objs[date_roomid][:price],
                     n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_objs[date_roomid][:n_of_units_available]
                 )
@@ -37,8 +38,8 @@ class AvailproWorker
             #change in price 
             if @new_prices_objs[date_roomid][:price] != @last_prices_objs[date_roomid][:price] && @new_prices_objs[date_roomid][:price] != -1 || @last_prices_objs[date_roomid][:price] != -1
                 NewPrice.create!(hotel_id: hotel_id, 
-                    room_category_id: @new_prices_objs[date_roomid][:room_category_id],
-                    date_of_price_id: @new_prices_objs[date_roomid][:date_of_price_id],
+                    room_category_id: @last_prices_objs[date_roomid][:room_category_id],
+                    date_of_price_id: @last_prices_objs[date_roomid][:date_of_price_id],
                     old_price: @last_prices_objs[date_roomid][:price],
                     new_price: @new_prices_objs[date_roomid][:price],
                     n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_objs[date_roomid][:n_of_units_available]
