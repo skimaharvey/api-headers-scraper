@@ -70,7 +70,7 @@ class LoginController < ApplicationController
             }
             comptetitors_prices = user.hotels.map{|hotel|
               all_hotels_ids.push(hotel.id)
-              last_hotel_scraping_session = hotel.scraping_sessions.where(is_ota_type: nil).last
+              last_hotel_scraping_session = hotel.scraping_sessions.where(is_ota_type: nil, is_complete: true).last
               room_cats = hotel.room_categories
               room_cats.each{|room_cat|
                 room_categories[room_cat.id] = room_cat
