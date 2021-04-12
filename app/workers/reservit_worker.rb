@@ -15,6 +15,46 @@ class ReservitWorker
         end
     end
 
+    def check_last_scraping_differences(new_scraping_id, hotel_id)
+        last_scraping_session = ScrapingSession.where(hotel_id: hotel_id, is_complete: true).where.not(id: new_scraping_id)
+        if last_scraping_session.length > 0 
+            @last_scraping_session_id = last_scraping_session.last.id
+        end
+        all_prices = Price.where(scraping_session_id: @last_scraping_session_id)
+        @last_prices_objs = {}
+        all_prices.each{|priceObj|
+            @last_prices_objs["#{priceObj.date_of_price_id}-#{priceObj.room_category_id}"] = 
+                {"price": priceObj.price, "n_of_units_available": priceObj.n_of_units_available,
+                 "room_category_id": priceObj.room_category_id, 
+                 "date_of_price_id": priceObj.date_of_price_id,
+                }  
+        }
+    
+        @new_prices_objs.keys.each{|date_roomid|
+            if @new_prices_objs.key?(date_roomid) && @last_prices_objs.key?(date_roomid)
+                #change in n_of_units available
+                if @new_prices_objs[date_roomid][:n_of_units_available] != @last_prices_objs[date_roomid][:n_of_units_available] 
+                    NewReservation.create!(hotel_id: hotel_id, 
+                        room_category_id: @last_prices_objs[date_roomid][:room_category_id],
+                        date_of_price_id: @last_prices_objs[date_roomid][:date_of_price_id],
+                        price: @new_prices_objs[date_roomid][:price]? @new_prices_objs[date_roomid][:price]: @last_prices_objs[date_roomid][:price],
+                        n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_objs[date_roomid][:n_of_units_available]
+                    )
+                end
+                #change in price 
+                if @new_prices_objs[date_roomid][:price] != @last_prices_objs[date_roomid][:price] && @new_prices_objs[date_roomid][:price] != -1 && @last_prices_objs[date_roomid][:price] != -1
+                    NewPrice.create!(hotel_id: hotel_id, 
+                        room_category_id: @last_prices_objs[date_roomid][:room_category_id],
+                        date_of_price_id: @last_prices_objs[date_roomid][:date_of_price_id],
+                        old_price: @last_prices_objs[date_roomid][:price],
+                        new_price: @new_prices_objs[date_roomid][:price],
+                        n_units: @new_prices_objs[date_roomid][:n_of_units_available]
+                    )
+                end
+            end
+        }
+    end
+
     def check_if_room_type_already_recorded(date_id)
         #some rooms have more than one price (for example triple rooms) but we just want the cheapest option
         price_for_room_code = Price.where(scraping_session_id: @scraping_session.id, hotel_id: 
@@ -25,6 +65,7 @@ class ReservitWorker
                 price_for_room_code[0].update(price: @price)
             end
         else
+            @new_prices_objs["#{date_id}-#{@room_id}"] = {"price": @price, "n_of_units_available": @n_units}
             new_price = Price.create!(price: @price, hotel_id: @hotel_id, room_category_id: @room_id, n_of_units_available: @n_units,
             date_of_price_id: date_id, scraping_session_id: @scraping_session.id, available: true
             )
@@ -49,6 +90,10 @@ class ReservitWorker
     @hotel_id = hotel_id
     @scraping_session = ScrapingSession.create!(date: Time.now, hotel_id: @hotel_id)
     DateOfPrice.for_the_next_90_days
+    #create hash of hashes with key ("date_of_price_id-room_category_id") and value will be 
+    #a hash containing the price and the availability 
+    @new_prices_objs = {}
+
     all_dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
 
     all_rooms_categories = {}
@@ -96,7 +141,7 @@ class ReservitWorker
         if response["errors"]
             puts "hotel is fully booked on #{dates_arr[index][:id].to_s}"
             @room_categories.each{|room_cat|
-                
+                @new_prices_objs["#{dates_arr[index][:id]}-#{room_cat["id"]}"] = {"price": -1, "n_of_units_available": 0}
                 new_price = Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: room_cat["id"], n_of_units_available: 0,
                     date_of_price_id: dates_arr[index][:id], scraping_session_id: @scraping_session.id, available: false
                 )
@@ -116,9 +161,10 @@ class ReservitWorker
                 check_if_room_type_already_recorded(dates_arr[index][:id])
                 room_type
             }
-            #find rooms not available for this specific date
+            #find rooms not available for this specific date and record them
             rooms_not_available = all_rooms_codes - actual_rooms 
             rooms_not_available.each{|room_code| 
+                @new_prices_objs["#{dates_arr[index][:id]}-#{all_rooms_categories[room_code]}"] = {"price": -1, "n_of_units_available": 0}
                 new_price = Price.create!(price: -1, hotel_id: @hotel_id, room_category_id: all_rooms_categories[room_code], n_of_units_available: 0,
                     date_of_price_id: dates_arr[index][:id], scraping_session_id: @scraping_session.id, available: false
                 )
@@ -145,6 +191,8 @@ class ReservitWorker
         end
     end
     }
-    send_scraping_session_to_client(@hotel_id)
+    check_last_scraping_differences(@scraping_session.id, @hotel_id)
+    scraping_session.update(is_complete: true)
+    send_scraping_session_to_client(@@hotel_id)
   end
 end
