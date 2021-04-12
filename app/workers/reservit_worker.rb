@@ -61,7 +61,7 @@ class ReservitWorker
             @hotel_id, room_category_id: @room_id,  date_of_price_id: date_id
         )
         if price_for_room_code.present?
-            unless price_for_room_code[0].price > @price 
+            if price_for_room_code[0].price > @price 
                 price_for_room_code[0].update(price: @price)
             end
         else
