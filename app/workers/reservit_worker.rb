@@ -94,7 +94,7 @@ class ReservitWorker
     #a hash containing the price and the availability 
     @new_prices_objs = {}
 
-    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
+    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(90)
 
     all_rooms_categories = {}
     all_rooms_codes =  RoomCategory.where(hotel_id: hotel_id).map{|room_cat|
@@ -193,6 +193,6 @@ class ReservitWorker
     }
     check_last_scraping_differences(@scraping_session.id, @hotel_id)
     @scraping_session.update(is_complete: true)
-    send_scraping_session_to_client(@@hotel_id)
+    send_scraping_session_to_client(@hotel_id)
   end
 end
