@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   #rooms routes
   post '/room_categories_list', to: 'room_categories#room_categories_list'
   post '/fetch_rooms_equivalences', to: 'room_categories#fetch_rooms_equivalences'
+  #prices changes and new reservations
+  post '/last_changes', to: 'changes#last_changes'
 
   mount Sidekiq::Web => '/sidekiq'
 
