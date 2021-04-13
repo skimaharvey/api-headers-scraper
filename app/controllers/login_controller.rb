@@ -7,7 +7,7 @@ class LoginController < ApplicationController
       else
         user = User.find(user_id)
         hotels = Hotel.all
-        dates = DateOfPrice.where('date >= ?', Date.today ).first(80)
+        dates = DateOfPrice.where('date >= ?', Date.today )
         room_categories = {}
         user_hotel = user.hotel
         all_hotels_ids = [] 
