@@ -55,7 +55,7 @@ class LoginController < ApplicationController
         user = User.find_by(email: params[:email].downcase)
         if user && user.authenticate(params[:password])
           hotels = Hotel.all
-          dates = DateOfPrice.where('date >= ?', Date.today ).first(90)
+          dates = DateOfPrice.where('date >= ?', Date.today )
           room_categories = {}
           user_hotel = user.hotel
           all_hotels_ids = [] 
