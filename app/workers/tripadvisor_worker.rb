@@ -82,7 +82,7 @@ def perform(hotel_id)
                 sleep 3
                 counter += 1
             end
-        rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET => error
+        rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET, NoMethodError => error
             if times_retried < max_retries
               times_retried += 1
               puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}"
