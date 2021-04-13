@@ -5,7 +5,7 @@ class DateOfPrice < ApplicationRecord
     
     def self.for_the_next_90_days
         todays_date = Date.today
-        90.times { 
+        200.times { 
             unless DateOfPrice.where(date: todays_date.to_s).present?
                 DateOfPrice.create(date: todays_date)
             end

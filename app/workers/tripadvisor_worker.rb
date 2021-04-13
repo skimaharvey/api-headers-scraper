@@ -17,7 +17,7 @@ def perform(hotel_id)
     formatted_date = tripadvisor_request.date
     scraping_session = ScrapingSession.create!(date: Time.now, hotel_id: hotel_id, is_ota_type: true)
     DateOfPrice.for_the_next_90_days
-    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(89)
+    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(180)
     post_url = 'https://www.tripadvisor.com/data/1.0/batch'
     
     exchange = HTTParty.get('http://data.fixer.io/api/latest?access_key=b2df67f2dec3a8ff428771e2df049519')

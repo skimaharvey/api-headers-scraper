@@ -78,7 +78,7 @@ class AvailproWorker
     @new_prices_objs = {}
 
     scraping_session = ScrapingSession.create(hotel_id: hotel_id)
-    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(90)
+    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(180)
     dates_arr = []
     dates_plus_one_arr = []
     all_dates.each {|date|

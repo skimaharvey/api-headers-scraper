@@ -94,7 +94,7 @@ class ReservitWorker
     #a hash containing the price and the availability 
     @new_prices_objs = {}
 
-    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(90)
+    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(180)
 
     all_rooms_categories = {}
     all_rooms_codes =  RoomCategory.where(hotel_id: hotel_id).map{|room_cat|
