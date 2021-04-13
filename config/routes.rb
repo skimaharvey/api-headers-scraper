@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post '/scraper', to: 'scraping_sessions#scraper_with_headers'
   post '/scraper_without_headers', to: 'scraping_sessions#scraper_without_headers'
   post '/all_competitors_scraper', to: 'scraping_sessions#launch_competitors_scraper'
+  post '/scrape_specific_hotel', to: 'scraping_sessions#scrape_specific_hotel'
   #hotels routes
   post '/new_hotel', to: 'hotels#create'
   post '/update_hotel', to: 'hotels#update'
