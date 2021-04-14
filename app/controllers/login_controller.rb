@@ -7,7 +7,7 @@ class LoginController < ApplicationController
       else
         user = User.find(user_id)
         hotels = Hotel.all
-        dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
+        # dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
         all_dates = DateOfPrice.where('date >= ?', Date.today )
         one_month_dates_ids = dates.map{|dateObj| dateObj.id}
         room_categories = {}
@@ -16,7 +16,7 @@ class LoginController < ApplicationController
         all_hotels_ids.push(user_hotel.id)
 
         last_user_hotel_scraping_session = user_hotel.scraping_sessions.where(is_ota_type: nil).last
-        user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session, date_of_price_id: one_month_dates_ids)
+        user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session)
         user.hotel.room_categories.each{|room_cat|
           room_categories[room_cat.id] = room_cat
         }
@@ -28,7 +28,7 @@ class LoginController < ApplicationController
             room_categories[room_cat.id] = room_cat
           }
           #SET UP SERIALIZER
-          hotel.prices.where(scraping_session_id: last_hotel_scraping_session, date_of_price_id: one_month_dates_ids)
+          hotel.prices.where(scraping_session_id: last_hotel_scraping_session)
         }
         #all_otas_prices for last scraping session 
         last_scraping_sessions_ids = []
@@ -38,7 +38,7 @@ class LoginController < ApplicationController
           end
         }
         
-        all_otas_prices = OtaPrice.where(scraping_session_id: scraping_sessions_ids, date_of_price_id: one_month_dates_ids)
+        all_otas_prices = OtaPrice.where(scraping_session_id: scraping_sessions_ids)
         
         render json: { token: token(user.id), 
           user_hotel_prices: user_hotel_prices, 
@@ -57,7 +57,7 @@ class LoginController < ApplicationController
         user = User.find_by(email: params[:email].downcase)
         if user && user.authenticate(params[:password])
           hotels = Hotel.all
-          dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
+          # dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
           all_dates = DateOfPrice.where('date >= ?', Date.today )
           one_month_dates_ids = dates.map{|dateObj| dateObj.id}
           room_categories = {}
@@ -69,7 +69,7 @@ class LoginController < ApplicationController
             
             last_user_hotel_scraping_session = user_hotel.scraping_sessions.where(is_ota_type: nil).last
             user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session, 
-            date_of_price_id: one_month_dates_ids)
+        )
             user.hotel.room_categories.each{|room_cat|
               room_categories[room_cat.id] = room_cat
             }
@@ -80,7 +80,7 @@ class LoginController < ApplicationController
               room_cats.each{|room_cat|
                 room_categories[room_cat.id] = room_cat
               }
-              hotel.prices.where(scraping_session_id: last_hotel_scraping_session, date_of_price_id: one_month_dates_ids)
+              hotel.prices.where(scraping_session_id: last_hotel_scraping_session)
             }
             #all_otas_prices for last scraping session 
             last_scraping_sessions_ids = []
@@ -90,7 +90,7 @@ class LoginController < ApplicationController
               end
             }
             
-            all_otas_prices = OtaPrice.where(scraping_session_id: scraping_sessions_ids, date_of_price_id: one_month_dates_ids)
+            all_otas_prices = OtaPrice.where(scraping_session_id: scraping_sessions_ids)
             
             render json: { token: token(user.id), 
               user_hotel_prices: user_hotel_prices, 
