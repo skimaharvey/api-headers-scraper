@@ -9,7 +9,7 @@ class LoginController < ApplicationController
         hotels = Hotel.all
         # dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
         all_dates = DateOfPrice.where('date >= ?', Date.today )
-        one_month_dates_ids = dates.map{|dateObj| dateObj.id}
+        # one_month_dates_ids = dates.map{|dateObj| dateObj.id}
         room_categories = {}
         user_hotel = user.hotel
         all_hotels_ids = [] 
@@ -59,7 +59,7 @@ class LoginController < ApplicationController
           hotels = Hotel.all
           # dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
           all_dates = DateOfPrice.where('date >= ?', Date.today )
-          one_month_dates_ids = dates.map{|dateObj| dateObj.id}
+          # one_month_dates_ids = dates.map{|dateObj| dateObj.id}
           room_categories = {}
           user_hotel = user.hotel
           all_hotels_ids = [] 
