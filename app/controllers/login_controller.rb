@@ -8,6 +8,7 @@ class LoginController < ApplicationController
         user = User.find(user_id)
         hotels = Hotel.all
         dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
+        all_dates = DateOfPrice.where('date >= ?', Date.today )
         room_categories = {}
         user_hotel = user.hotel
         all_hotels_ids = [] 
@@ -42,7 +43,7 @@ class LoginController < ApplicationController
           user_hotel_prices: user_hotel_prices, 
           comptetitors_prices: comptetitors_prices,
           hotels: hotels,
-          dates: dates,
+          dates: all_dates,
           room_categories: room_categories,
           user_id: user.id,
           ota_prices: all_otas_prices
@@ -56,6 +57,7 @@ class LoginController < ApplicationController
         if user && user.authenticate(params[:password])
           hotels = Hotel.all
           dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
+          all_dates = DateOfPrice.where('date >= ?', Date.today )
           room_categories = {}
           user_hotel = user.hotel
           all_hotels_ids = [] 
@@ -91,7 +93,7 @@ class LoginController < ApplicationController
               user_hotel_prices: user_hotel_prices, 
               comptetitors_prices: comptetitors_prices,
               hotels: hotels,
-              dates: dates,
+              dates: all_dates,
               room_categories: room_categories,
               user_id: user.id,
               ota_prices: all_otas_prices
