@@ -26,4 +26,8 @@ class TripadvisorRequestsController < ApplicationController
         }
         render json: {"message": "Fetching Ota's prices started"}, status: 200
     end
+
+    def fetch_specific_hotel_ota 
+        TripadvisorWorker.perform_async(params['hotel_id'])
+    end
 end

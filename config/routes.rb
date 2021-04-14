@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get '/prices', to: 'prices#index'
   post '/prices', to: 'prices#create'
   post '/destroy_hotel_prices', to: 'prices#destroy_hotel_prices'
+  post '/fetch_all_price', to: 'prices#fetch_all_price'
   #scraper routes
   post '/scraper', to: 'scraping_sessions#scraper_with_headers'
   post '/scraper_without_headers', to: 'scraping_sessions#scraper_without_headers'
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
   #tripadvisor route 
   post '/create_trip_request', to: "tripadvisor_requests#create"
   post '/fetch_user_otas', to: "tripadvisor_requests#fetch_all_user_otas" 
+  post "/fetch_specific_hotel_ota", to: 'tripadvisor_requests#fetch_specific_hotel_ota'
   #ota scraper routes
   post "/scrape_hotel_ota", to: 'ota_scrapers#scraper_specific_hotel'
   #rooms routes
