@@ -63,10 +63,11 @@ class SynxisWorker
     '191.102.167.239', '107.150.64.25', '191.102.167.102', '209.58.157.66', '191.102.167.55'
     ]
     # url  = synxis_att.url 
+    new_proxy = proxies.sample
     puts synxis_cookie
     # synxis_cookie =  "visid_incap_1215874=zmwMYOYQQ62EPa7Ju6b0piyeeWAAAAAAQUIPAAAAAABmfCa4Czk75Jm5h/83fJAn; incap_ses_1362_1215874=VSxPMihrOg/ruFTG5MvmEiyeeWAAAAAAXiz1mXPEUYjG23u1uiOs0Q==; sessionID=4bFWBFXEpjh0fBdQfy7tqpGc; apisession=MDAxMTZ-SXpxT1U4cjREK05HNlVDQjd3UnoweitHQ1dJSjNyd0hyOTlaRS9UdGtIK05KVlBrbDNHSjFmTnNBTnFudld6VVNydmN6Z1dRR2d0V1RTSXpMMFc1V3FiaE5IK3EzTnluMGRRZlhpdkRlZ1dqaGQ5YnJnWUtEMjFlTWN3SkwzZGE2SzBuRURmQ1hFQ1BLZUt0WVV5cE5uTzR0Rmc2WEVWQ3JxK3lFRWJEdkZDL2lpMXRJbGxKcm9mNm5ReUhmbmNNUDErMUxNQUs5VWZEOWFpakM2YVl3YzFUY09aM25ZeWVTejF4akdWc0hoWUNVLzdEM0ROT2RQcGZtZDdDK3YxMjYzNzdPbldpYUFrck14Z3JyZGhKRmlhbWw1VmFQb1g1V2JKL3UrTG5RYWw4WnM4TU1jbWloc01tMzEydXdIQ0c; nlbi_1215874=1z5BHjfcZ2lxJoFQnAADWwAAAAAf+i6LsIVe6JR6q/IA2HMM"
 
-    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(180)
+    all_dates = DateOfPrice.where('date >= ?', Date.today ).first(30)
     dates_arr = []
     dates_plus_one_arr = []
     all_dates.each {|date|
@@ -79,16 +80,17 @@ class SynxisWorker
       room_cat.name
     }
     max_retries = 2
+    HTTParty::Basement.http_proxy(new_proxy, 7777, 'maxvia', '141614')
     dates_arr.each_with_index{|date, index|
         times_retried = 0
         body_request = modify_body_request(date[:date], dates_plus_one_arr[index], initial_body_request)
         begin 
-        new_proxy = proxies.sample
-        HTTParty::Basement.http_proxy(new_proxy, 7777, 'maxvia', '141614')
+        # new_proxy = proxies.sample
         sleep (1..6).to_a.sample
+        # HTTParty::Basement.http_proxy(new_proxy, 7777, 'maxvia', '141614')
         response = HTTParty.post(url, 
             :body => body_request.to_json,
-            :headers => { 'Content-Type' =>  'application/json;charset=UTF-8',
+            :headers => { 'content-type' =>  'application/json',
                           'Conversation-ID' => '1spskcg4k',
                           'cookie' => synxis_cookie,
                           # "Set-Cookie" =>"apisession=MDAxMTZ-cVd4aFVCSkM1cmRjYTJ2WWZmc1dUNUhOTnNMeThNN05SK05TV2U2alZSbHNlaGNBYmtkTHVFNkxFZkZnMmFyZGYxQ2RnNWZsdThKOHVGTlVDSUNWcHVoYVVDUGhNaXdTcVJ4bDMzU1lZM3JzZW5vYWlieVQwNDVxSE1uZVVSMFJGS0RZRGc2eG5JWVV2N1pBaFJsM0ZDV0Y0WFNhY2cwZk9DWlhiaDNiWlBWYVVPNE5hcEN4aHFnVCttSlV6TDJlUkRMRi9abmNUQ0FmeDFrWmUrY2NCejZVOTRvVzFNYmRtWlB1WUFYT1M4ZGEzaFg1V3FMZ0J5UVVNZllwUkxkb3JrdDlINjFNM0RBS2dzNzA5TEUzS1p1S1JKbWphMnd1bjg5d1o3NzBLVU5QMjdUeElwbkd2UW9IVll0d3N6ay8; Domain=synxis.com; Path=/; HttpOnly; Secure",
@@ -98,7 +100,7 @@ class SynxisWorker
                           # "Content-Length" => '76'
                        } 
         )
-        puts response
+        puts "good headers: #{response.headers}"
         product_status = response["ProductAvailabilityDetail"]["LeastRestrictiveFailure"]["ProductStatus"]
         if product_status == "NoAvailableInventory" 
             puts "fully booked on date id: #{date[:date]}"
