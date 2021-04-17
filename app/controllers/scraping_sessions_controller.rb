@@ -57,6 +57,7 @@ class ScrapingSessionsController < ApplicationController
                 #ReservitJob.perform_later(hotel_reservation_code, hotel_id, authorization_code, cookie)
                 SynxisWorker.perform_async(hotel_id, cookie)
         end
+        render json: {"message": "Scraper starting"}
     end
 
     def scrape_specific_hotel
