@@ -137,7 +137,7 @@ class SynxisWorker
               if rooms_prices_obj.key?(room_name.to_sym) || rooms_prices_obj.key?(room_name)
                 if room_price[room_name] > minimum_price || room_price[room_name.to_sym] > minimum_price
                   @new_prices_objs["#{date[:id]}-#{hotel_rooms_obj[room_name]}"] = {"price": minimum_price, "n_of_units_available": stock}
-                  price_to_update = Price.where(scraping_session_id:scraping_session_id, room_category_id: room_category_id: hotel_rooms_obj[room_name],
+                  price_to_update = Price.where(scraping_session_id:scraping_session_id, room_category_id:  hotel_rooms_obj[room_name],
                   date_of_price_id: date[:id], room_category_id: hotel_rooms_obj[room_name]).last
                   price_to_update.update(price: minimum_price)
                 end
