@@ -127,5 +127,6 @@ class SynxisCreateWorker
       end
         sleep 1
     }
+    SynxisWorker.perform_aync(hotel_id, synxis_cookie)
   end
 end
