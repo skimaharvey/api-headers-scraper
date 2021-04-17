@@ -15,14 +15,14 @@ class LoginController < ApplicationController
         all_hotels_ids = [] 
         all_hotels_ids.push(user_hotel.id)
 
-        last_user_hotel_scraping_session = user_hotel.scraping_sessions.where(is_ota_type: nil || false).last
+        last_user_hotel_scraping_session = user_hotel.scraping_sessions.where(is_ota_type:  [nil,false]).last
         user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session)
         user.hotel.room_categories.each{|room_cat|
           room_categories[room_cat.id] = room_cat
         }
         comptetitors_prices = user.hotels.map{|hotel|
           all_hotels_ids.push(hotel.id)
-          last_hotel_scraping_session = hotel.scraping_sessions.where(is_ota_type: nil || false, is_complete: true).last
+          last_hotel_scraping_session = hotel.scraping_sessions.where(is_ota_type:  [nil,false], is_complete: true).last
           room_cats = hotel.room_categories
           room_cats.each{|room_cat|
             room_categories[room_cat.id] = room_cat
@@ -67,7 +67,7 @@ class LoginController < ApplicationController
 
           if !user_hotel.scraping_sessions.empty?
             
-            last_user_hotel_scraping_session = user_hotel.scraping_sessions.where(is_ota_type: nil || false).last
+            last_user_hotel_scraping_session = user_hotel.scraping_sessions.where(is_ota_type: [nil,false]).last
             user_hotel_prices = user_hotel.prices.where(scraping_session_id: last_user_hotel_scraping_session, 
         )
             user.hotel.room_categories.each{|room_cat|
@@ -75,7 +75,7 @@ class LoginController < ApplicationController
             }
             comptetitors_prices = user.hotels.map{|hotel|
               all_hotels_ids.push(hotel.id)
-              last_hotel_scraping_session = hotel.scraping_sessions.where(is_ota_type: nil || false, is_complete: true).last
+              last_hotel_scraping_session = hotel.scraping_sessions.where(is_ota_type:  [nil,false], is_complete: true).last
               room_cats = hotel.room_categories
               room_cats.each{|room_cat|
                 room_categories[room_cat.id] = room_cat
