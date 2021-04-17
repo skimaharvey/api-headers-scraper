@@ -1,5 +1,6 @@
 class SynxisWorker
   include Sidekiq::Worker
+  # sidekiq_options :retry => false
 
   def modify_body_request(checkin_date, checkout_date, initial_body)
     initial_body[:ProductAvailabilityQuery][:RoomStay][:StartDate] = checkin_date
@@ -77,23 +78,27 @@ class SynxisWorker
       hotel_rooms_obj[room_cat.name] = room_cat.id
       room_cat.name
     }
-    max_retries = 3
+    max_retries = 2
     dates_arr.each_with_index{|date, index|
         times_retried = 0
         body_request = modify_body_request(date[:date], dates_plus_one_arr[index], initial_body_request)
         begin 
-        HTTParty::Basement.http_proxy(proxies.sample, 7777, 'maxvia', '141614')
-
+        new_proxy = proxies.sample
+        HTTParty::Basement.http_proxy(new_proxy, 7777, 'maxvia', '141614')
+        sleep (1..6).to_a.sample
         response = HTTParty.post(url, 
             :body => body_request.to_json,
-            :headers => { 'Content-Type' =>  'application/json',
+            :headers => { 'Content-Type' =>  'application/json;charset=UTF-8',
+                          'Conversation-ID' => '1spskcg4k',
                           'cookie' => synxis_cookie,
+                          # "Set-Cookie" =>"apisession=MDAxMTZ-cVd4aFVCSkM1cmRjYTJ2WWZmc1dUNUhOTnNMeThNN05SK05TV2U2alZSbHNlaGNBYmtkTHVFNkxFZkZnMmFyZGYxQ2RnNWZsdThKOHVGTlVDSUNWcHVoYVVDUGhNaXdTcVJ4bDMzU1lZM3JzZW5vYWlieVQwNDVxSE1uZVVSMFJGS0RZRGc2eG5JWVV2N1pBaFJsM0ZDV0Y0WFNhY2cwZk9DWlhiaDNiWlBWYVVPNE5hcEN4aHFnVCttSlV6TDJlUkRMRi9abmNUQ0FmeDFrWmUrY2NCejZVOTRvVzFNYmRtWlB1WUFYT1M4ZGEzaFg1V3FMZ0J5UVVNZllwUkxkb3JrdDlINjFNM0RBS2dzNzA5TEUzS1p1S1JKbWphMnd1bjg5d1o3NzBLVU5QMjdUeElwbkd2UW9IVll0d3N6ay8; Domain=synxis.com; Path=/; HttpOnly; Secure",
                           'Host' => 'be.synxis.com',
                           'Cache-Control' => 'no-cache',
-                          "User-Agent" => "randomn",
-                          "Content-Length" => '76'
+                          "User-Agent" => "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/5312 (KHTML, like Gecko) Chrome/40.0.863.0 Mobile Safari/5312",
+                          # "Content-Length" => '76'
                        } 
         )
+        puts response
         product_status = response["ProductAvailabilityDetail"]["LeastRestrictiveFailure"]["ProductStatus"]
         if product_status == "NoAvailableInventory" 
             puts "fully booked on date id: #{date[:date]}"
@@ -152,7 +157,8 @@ class SynxisWorker
       rescue => error
         if times_retried < max_retries
           times_retried += 1
-          puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}"
+          puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}, proxy: #{new_proxy}"
+          proxies.delete(new_proxy)
           retry
         else
           puts error

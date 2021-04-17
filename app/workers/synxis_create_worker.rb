@@ -45,6 +45,7 @@ class SynxisCreateWorker
         times_retried = 0
         body_request = modify_body_request(date[:date], dates_plus_one_arr[index], initial_body_request)
         begin 
+        sleep (1..6).to_a.sample
         HTTParty::Basement.http_proxy(proxies.sample, 7777, 'maxvia', '141614')
         response = HTTParty.post(url, 
             :body => body_request.to_json,
