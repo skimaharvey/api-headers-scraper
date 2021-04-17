@@ -173,8 +173,8 @@ class SynxisWorker
           sleep 30
           retry
         else
-          puts error
           puts "ADD SPECIFIC DATE TO WORKER"
+          break
           #   exit(1)
         end
       end
