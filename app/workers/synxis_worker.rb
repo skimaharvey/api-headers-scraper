@@ -1,6 +1,6 @@
 class SynxisWorker
   include Sidekiq::Worker
-  # sidekiq_options :retry => false
+  sidekiq_options :retry => false
 
   def modify_body_request(checkin_date, checkout_date, initial_body)
     initial_body[:ProductAvailabilityQuery][:RoomStay][:StartDate] = checkin_date
@@ -167,7 +167,7 @@ class SynxisWorker
       rescue => error
         if times_retried < max_retries
           times_retried += 1
-          puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}, proxy: #{new_proxy}"
+          puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}, proxy: #{new_proxy}, cookie: #{synxis_cookie}"
           # proxies.delete(new_proxy)
           sleep 30
           retry
