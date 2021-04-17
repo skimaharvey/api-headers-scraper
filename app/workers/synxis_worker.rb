@@ -158,7 +158,8 @@ class SynxisWorker
         if times_retried < max_retries
           times_retried += 1
           puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}, proxy: #{new_proxy}"
-          proxies.delete(new_proxy)
+          # proxies.delete(new_proxy)
+          sleep 30
           retry
         else
           puts error
