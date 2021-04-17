@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_11_202506) do
+ActiveRecord::Schema.define(version: 2021_04_15_093955) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.date "date"
@@ -149,6 +149,8 @@ ActiveRecord::Schema.define(version: 2021_04_11_202506) do
     t.datetime "updated_at", null: false
     t.integer "hotel_id"
     t.string "room_type_name"
+    t.integer "size"
+    t.integer "max_capacity"
     t.index ["hotel_id"], name: "index_room_categories_on_hotel_id"
   end
 
@@ -199,6 +201,17 @@ ActiveRecord::Schema.define(version: 2021_04_11_202506) do
     t.boolean "is_ota_type"
     t.boolean "is_complete"
     t.index ["hotel_id"], name: "index_scraping_sessions_on_hotel_id"
+  end
+
+  create_table "synxis_helpers", force: :cascade do |t|
+    t.integer "hotel_id"
+    t.integer "chain_ref"
+    t.integer "hotel_ref"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "url"
+    t.text "body_request"
+    t.index ["hotel_id"], name: "index_synxis_helpers_on_hotel_id"
   end
 
   create_table "synxis_scrapers", force: :cascade do |t|

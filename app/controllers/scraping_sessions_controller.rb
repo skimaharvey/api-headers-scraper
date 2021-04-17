@@ -53,6 +53,9 @@ class ScrapingSessionsController < ApplicationController
             when 'reservit'
                 #ReservitJob.perform_later(hotel_reservation_code, hotel_id, authorization_code, cookie)
                 ReservitWorker.perform_async(hotel_reservation_code, hotel_id, authorization_code, cookie)
+            when 'synxis'
+                #ReservitJob.perform_later(hotel_reservation_code, hotel_id, authorization_code, cookie)
+                SynxisWorker.perform_async(hotel_id, cookie)
         end
     end
 

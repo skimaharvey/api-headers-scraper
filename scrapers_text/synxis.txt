@@ -1,0 +1,10 @@
+#Create hotel 
+Needed:
+    hotel_name
+    hotel_ref (synxis ref id)
+    chain_ref (synxis chain id)
+
+
+How it works: 
+    Python API will get the cookie then send it back to ruby api 
+    so that ruby api can fetch availabilities

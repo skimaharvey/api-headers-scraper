@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hotel: one
+  chain_ref: 1
+  hotel_ref: 1
+
+two:
+  hotel: two
+  chain_ref: 1
+  hotel_ref: 1

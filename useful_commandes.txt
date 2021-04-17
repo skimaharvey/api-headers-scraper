@@ -1,5 +1,7 @@
-#delete all pending jobs in sidekiq:
+#launch sidekiq worker 
+bundle exec sidekiq
 
+#delete all pending jobs in sidekiq:
 Sidekiq::Queue.all.each(&:clear)
 
 #see pending jobs sidekiq:

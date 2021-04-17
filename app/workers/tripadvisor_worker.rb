@@ -82,7 +82,8 @@ def perform(hotel_id)
                 sleep 3
                 counter += 1
             end
-        rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET, NoMethodError, EOFError => error
+        rescue
+        # rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET, NoMethodError, EOFError => error
             if times_retried < max_retries
               times_retried += 1
               puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}"
@@ -94,5 +95,6 @@ def perform(hotel_id)
             end
         end
     }
+    scraping_session.update(is_complete: true)
     end
 end

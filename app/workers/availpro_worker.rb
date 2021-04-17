@@ -131,7 +131,9 @@ class AvailproWorker
             }
         end
         sleep 1
-        rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET,  Net::HTTPFatalError => error
+        rescue 
+
+        # rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET,  Net::HTTPFatalError => error
             if times_retried < max_retries
             times_retried += 1
             puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}"

@@ -25,17 +25,21 @@ class HotelsController < ApplicationController
             #     :body => { :hotel_name => params["name"], 
             #             :hotel_reservation_code => params["hotel_reservation_code"], 
             #             :hotel_id => @hotel.id, 
-            #             },
+            #             }
             # )
             # print response
             # authorization_code = response[:authorization_code]
             # cookie = response[:cookie]
-            authorization_code = "Bearer d150afd5ce4ecde24f83ab264ffd7485721fd2f4"
-            cookie = "JSESSIONID=0E4191AA9C594DC414A49A8FA5BB091D"
+            # authorization_code = "Bearer d150afd5ce4ecde24f83ab264ffd7485721fd2f4"
+            # cookie = "JSESSIONID=0E4191AA9C594DC414A49A8FA5BB091D"
             # create rooms
             ReservitCreateWorker.perform_async(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
             #fetch availabilities
             # ReservitWorker.perform_async(params["hotel_reservation_code"], authorization_code, cookie, @hotel.id)
+        when 'synxis'
+            #TODO CREATE PYTHON SCRAPER TO GET COOKIE BACK AND HAVE PYTHON SCRAPER MAKE A POST REQUEST TO RAILS API
+            SynxisHelper.create(hotel_id: @hotel.id, chain_ref: params['hotel_chain'], hotel_ref: params['hotel_ref'])
+            SynxisCreateWorker.perform_async(params['hotel_chain'], params['hotel_ref'], @hotel.id)
         end
         render json: {"hotel_id": @hotel}, status: 200
         # rescue => error

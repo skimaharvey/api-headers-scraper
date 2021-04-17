@@ -37,7 +37,7 @@ class ReservitWorker
                     NewReservation.create!(hotel_id: hotel_id, 
                         room_category_id: @last_prices_objs[date_roomid][:room_category_id],
                         date_of_price_id: @last_prices_objs[date_roomid][:date_of_price_id],
-                        price: @new_prices_objs[date_roomid][:price]? @new_prices_objs[date_roomid][:price]: @last_prices_objs[date_roomid][:price],
+                        price: @last_prices_objs[date_roomid][:price]? @last_prices_objs[date_roomid][:price] : @new_prices_objs[date_roomid][:price],
                         n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_objs[date_roomid][:n_of_units_available]
                     )
                 end
@@ -179,7 +179,8 @@ class ReservitWorker
     #     )
     #     next
     # end
-    rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET, Net::HTTPFatalError  => error
+    rescue 
+    # rescue Net::ReadTimeout, Net::OpenTimeout, Errno::ECONNREFUSED, Errno::ECONNRESET, Net::HTTPFatalError  => error
         if times_retried < max_retries
         times_retried += 1
         puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}"
