@@ -88,6 +88,7 @@ class SynxisWorker
         # new_proxy = proxies.sample
         sleep (1..6).to_a.sample
         # HTTParty::Basement.http_proxy(new_proxy, 7777, 'maxvia', '141614')
+        referer = "https://be.synxis.com/?_submit=18/04/2021&adult=1&arrive=2021-04-18&chain=18985&child=0&config=CHAIN_CONFIGS&currency=EUR&depart=2021-04-19&etabIdQS=18985&fday=18&fmonth=04&fyear=2021&hotel=68208&level=hotel&locale=en-US&rooms=1&shell=ResponsiveShared&start=availresults&tday=19&template=ResponsiveShared&tmonth=04&tyear=2021"
         response = HTTParty.post(url, 
             :body => body_request.to_json,
             :headers => { 'content-type' =>  'application/json',
@@ -97,6 +98,7 @@ class SynxisWorker
                           'Host' => 'be.synxis.com',
                           'Cache-Control' => 'no-cache',
                           "User-Agent" => "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/5312 (KHTML, like Gecko) Chrome/40.0.863.0 Mobile Safari/5312",
+                          "referer" => referer
                           # "Content-Length" => '76'
                        } 
         )
@@ -137,7 +139,7 @@ class SynxisWorker
               current_rooms.push(room_name)
               rooms_prices_obj[room_name] = minimum_price
               if rooms_prices_obj.key?(room_name.to_sym) || rooms_prices_obj.key?(room_name)
-                if room_price[room_name] > minimum_price || room_price[room_name.to_sym] > minimum_price
+                if rooms_prices_obj[room_name] > minimum_price
                   @new_prices_objs["#{date[:id]}-#{hotel_rooms_obj[room_name]}"] = {"price": minimum_price, "n_of_units_available": stock}
                   price_to_update = Price.where(scraping_session_id:scraping_session_id, room_category_id:  hotel_rooms_obj[room_name],
                   date_of_price_id: date[:id]).last
@@ -171,6 +173,8 @@ class SynxisWorker
           times_retried += 1
           puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}, proxy: #{new_proxy}, cookie: #{synxis_cookie}"
           puts "response headers: #{response.headers}"
+          puts "--------------"
+          puts error
           # proxies.delete(new_proxy)
           sleep 30
           retry
