@@ -30,6 +30,17 @@ class UserHotelsScraperWorker
                 # clos_url = "https://www.secure-hotel-booking.com/smart/Le-Clos-d-Amboise/24Y6/en/Room/CheckAvailability"
                 cookie =  '__RequestVerificationToken_L3NtYXJ00=b5IcD6KP4D6r9qLL-nqN1n8fVkgW5gv9bNCph0UcW4murOFktiD6ptqSHa8qTlJtleosjnOH3aG5-9Dii_4drN6L63MGWcdBmsAbPYGlmQg1; _gid=GA1.2.1953277223.1615054743; hdb_uid=01f2847d60a0def3bda6c5c7c1db365b; user_ip=138.199.47.149; PageCount=10; _ga=GA1.2.1137562290.1615054743; _ga_MCT4PKC8C8=GS1.1.1615061472.2.0.1615061472.60; availpro.be.applicationVersion=4.19.1.61495'
                 AvailproWorker.perform_async(hotel_id, hotel.reservation_url, verification_token, cookie)
+            when "synxis"
+              #TODO MAKE A SMALL PYTHON API THAT WILL GET THE HEADERS INFOS
+              synxis_att = SynxisHelper.find_by(hotel_id: hotel_id)
+              hotel_chain = synxis_att.chain_ref
+              hotel_ref = synxis_att.hotel_ref
+              response = HTTParty.post('https://django-scraper.caprover.scrapthem.com/scraper_synxis_async/', 
+              :body => { :hotel_chain => hotel_chain, 
+                      :hotel_id => hotel_ref, 
+                      :rails_hotel_id => hotel.id, 
+                      }
+              )        
         end
     }
   end

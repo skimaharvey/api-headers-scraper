@@ -19,15 +19,7 @@ class ScrapingSessionsController < ApplicationController
                     response = HTTParty.post('https://django-scraper.caprover.scrapthem.com/scraper/', 
                     :body => { "hotel_id": hotel_id, "hotel_name": hotel.name,
                         "hotel_reservation_code": hotel_reservation_code},
-                    )
-                    # if response['cookie'] != 'error'
-                    #     # ReservitScraper.launch_scraper(hotel_reservation_code, 
-                    #     # response['authorization_code'], response['cookie'], hotel_id)
-                    #     render json: {"message": "#{hotel.name} headers are going to be fetched"}, status: 200
-                    # else
-                    #     #CREATE A ACTIVE JOB MODEL THAT WILL CALL X AMOUNT OF TIME IF HEADERS ARE INCORRECTLY FETCHED
-                    #     render json: {"error": "#{hotel.name} were not fectched because headers scraper returned an error"}, status: 500
-                    # end   
+                    )  
                     render json: {"message": "#{hotel.name} headers are going to be fetched"}, status: 200  
                 rescue
                     ScrapingError.create(error: "error when fetching the reservit headers", hotel_id: hotel_id)

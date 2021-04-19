@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_093955) do
+ActiveRecord::Schema.define(version: 2021_04_19_070101) do
 
   create_table "date_of_prices", force: :cascade do |t|
     t.date "date"
@@ -128,6 +128,15 @@ ActiveRecord::Schema.define(version: 2021_04_15_093955) do
     t.index ["hotel_id"], name: "index_prices_on_hotel_id"
     t.index ["room_category_id"], name: "index_prices_on_room_category_id"
     t.index ["scraping_session_id"], name: "index_prices_on_scraping_session_id"
+  end
+
+  create_table "proxies", force: :cascade do |t|
+    t.string "proxy_body"
+    t.integer "port"
+    t.string "username"
+    t.string "password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "reservation_managers", force: :cascade do |t|

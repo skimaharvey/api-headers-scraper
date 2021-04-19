@@ -31,6 +31,10 @@ Rails.application.routes.draw do
   post '/fetch_rooms_equivalences', to: 'room_categories#fetch_rooms_equivalences'
   #prices changes and new reservations
   post '/last_changes', to: 'changes#last_changes'
+  #proxies 
+  post "/create_proxy", to: 'proxies#create'
+  post "/delete_proxies", to: 'proxies#delete'
+  get "/proxies", to: 'proxies#index'
 
   mount Sidekiq::Web => '/sidekiq'
 
