@@ -32,7 +32,9 @@ class AvailproCreateWorker
         dates_arr << {"date": date.date.strftime("%Y-%m-%d"), "id": date.id }
         dates_plus_one_arr << date.date.next_day(1).strftime("%Y-%m-%d")
     }
-
+    proxies = Proxy.all 
+    random_proxy = proxies.sample
+    HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
 
     dates_arr.each_with_index{|date, index|
         response = HTTParty.post(url, 

@@ -17,7 +17,7 @@ class ReservitCreateWorker
   end
 
   def perform(hotel_reservation_code, authorization_code, cookie, hotel_id)
-   
+    proxies = Proxy.all
     @hotel_reservation_code = hotel_reservation_code
     @hotel_id = hotel_id
     DateOfPrice.for_the_next_90_days
@@ -40,6 +40,8 @@ class ReservitCreateWorker
     # print authorization_code
     urls.each_with_index{|url, index|
     # begin
+        random_proxy = proxies.sample
+        HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
         @current_url = url
         response = HTTParty.get(url, 
         :headers => { 'Accept' =>  'application/json',

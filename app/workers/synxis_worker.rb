@@ -59,9 +59,7 @@ class SynxisWorker
     scraping_session_id = scraping_session.id
     url = synxis_att.url
     initial_body_request = synxis_att.body_request
-    proxies = ['107.150.65.179', '209.58.157.45', '107.150.64.7', '191.102.167.205', '107.150.65.166',
-    '191.102.167.239', '107.150.64.25', '191.102.167.102', '209.58.157.66', '191.102.167.55'
-    ]
+
     # url  = synxis_att.url 
     new_proxy = proxies.sample
     puts synxis_cookie
@@ -80,7 +78,11 @@ class SynxisWorker
       room_cat.name
     }
     max_retries = 2
-    HTTParty::Basement.http_proxy(new_proxy, 7777, 'maxvia', '141614')
+    
+    proxies = Proxy.all 
+    random_proxy = proxies.sample
+    HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
+
     dates_arr.each_with_index{|date, index|
         times_retried = 0
         body_request = modify_body_request(date[:date], dates_plus_one_arr[index], initial_body_request)

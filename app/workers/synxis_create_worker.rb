@@ -16,9 +16,8 @@ class SynxisCreateWorker
     hotel_ref = synxis_id
     url = synxis_att.url
     initial_body_request = synxis_att.body_request
-    proxies = ['107.150.65.179', '209.58.157.45', '107.150.64.7', '191.102.167.205', '107.150.65.166',
-    '191.102.167.239', '107.150.64.25', '191.102.167.102', '209.58.157.66', '191.102.167.55'
-    ]
+
+    
     response = HTTParty.post('https://django-scraper.caprover.scrapthem.com/scraper_synxis/', 
     :body => { :hotel_chain => hotel_chain, 
             :hotel_id => hotel_ref, 
@@ -41,12 +40,14 @@ class SynxisCreateWorker
     }
     @hotel_rooms = []
     max_retries = 3
+    proxies = Proxy.all 
     dates_arr.each_with_index{|date, index|
         times_retried = 0
         body_request = modify_body_request(date[:date], dates_plus_one_arr[index], initial_body_request)
         begin 
         sleep (1..6).to_a.sample
-        HTTParty::Basement.http_proxy(proxies.sample, 7777, 'maxvia', '141614')
+        random_proxy = proxies.sample
+        HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
         response = HTTParty.post(url, 
             :body => body_request.to_json,
             :headers => { 'Content-Type' =>  'application/json;charset=UTF-8',
