@@ -1,6 +1,7 @@
 class ProxiesController < ApplicationController
     def create
-        new_proxy = Proxy.create(proxy_body: params['proxy_body'], port: params['port'], password: params['password'])
+        new_proxy = Proxy.create(proxy_body: params['proxy_body'], port: params['port'], password: params['password'],
+        username: params['username'])
         render json: {"proxy": new_proxy}
     end
 
