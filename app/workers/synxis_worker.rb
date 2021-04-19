@@ -49,6 +49,21 @@ class SynxisWorker
 
   end
 
+  def generate_referer(arrival_date, depart_date)
+    today_formatted = Date.today.strftime("%d/%m/%Y")
+    arrival = Date.parse(arrival_date)
+    arr_day = arrival.day 
+    arr_month = arrival.month 
+    arr_year = arrival.year
+
+    depart = Date.parse(depart_date)
+    depart_day = depart.day 
+    depart_month = depart.month 
+    depart_year = depart.year
+
+    "https://be.synxis.com/?_submit=#{today_formatted}&adult=1&arrive=#{arrival_date}&chain=18985&child=0&config=CHAIN_CONFIGS&currency=EUR&depart=#{depart_date}&etabIdQS=18985&fday=#{arr_day}&fmonth=#{arr_month}&fyear=#{arr_year}&hotel=68208&level=hotel&locale=en-US&rooms=1&shell=ResponsiveShared&start=availresults&tday=#{depart_day}&template=ResponsiveShared&tmonth=#{depart_month}&tyear=#{depart_year}"
+  end
+
   def perform(hotel_id, synxis_cookie)
     hotel = Hotel.find(hotel_id)
     synxis_att = SynxisHelper.find_by(hotel_id: hotel_id)
@@ -61,7 +76,6 @@ class SynxisWorker
     initial_body_request = synxis_att.body_request
 
     # url  = synxis_att.url 
-    new_proxy = proxies.sample
     puts synxis_cookie
     # synxis_cookie =  "visid_incap_1215874=zmwMYOYQQ62EPa7Ju6b0piyeeWAAAAAAQUIPAAAAAABmfCa4Czk75Jm5h/83fJAn; incap_ses_1362_1215874=VSxPMihrOg/ruFTG5MvmEiyeeWAAAAAAXiz1mXPEUYjG23u1uiOs0Q==; sessionID=4bFWBFXEpjh0fBdQfy7tqpGc; apisession=MDAxMTZ-SXpxT1U4cjREK05HNlVDQjd3UnoweitHQ1dJSjNyd0hyOTlaRS9UdGtIK05KVlBrbDNHSjFmTnNBTnFudld6VVNydmN6Z1dRR2d0V1RTSXpMMFc1V3FiaE5IK3EzTnluMGRRZlhpdkRlZ1dqaGQ5YnJnWUtEMjFlTWN3SkwzZGE2SzBuRURmQ1hFQ1BLZUt0WVV5cE5uTzR0Rmc2WEVWQ3JxK3lFRWJEdkZDL2lpMXRJbGxKcm9mNm5ReUhmbmNNUDErMUxNQUs5VWZEOWFpakM2YVl3YzFUY09aM25ZeWVTejF4akdWc0hoWUNVLzdEM0ROT2RQcGZtZDdDK3YxMjYzNzdPbldpYUFrck14Z3JyZGhKRmlhbWw1VmFQb1g1V2JKL3UrTG5RYWw4WnM4TU1jbWloc01tMzEydXdIQ0c; nlbi_1215874=1z5BHjfcZ2lxJoFQnAADWwAAAAAf+i6LsIVe6JR6q/IA2HMM"
 
@@ -78,8 +92,9 @@ class SynxisWorker
       room_cat.name
     }
     max_retries = 2
-    
+
     proxies = Proxy.all 
+    
     random_proxy = proxies.sample
     HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
 
@@ -90,7 +105,7 @@ class SynxisWorker
         # new_proxy = proxies.sample
         sleep (1..6).to_a.sample
         # HTTParty::Basement.http_proxy(new_proxy, 7777, 'maxvia', '141614')
-        referer = "https://be.synxis.com/?_submit=18/04/2021&adult=1&arrive=2021-04-18&chain=18985&child=0&config=CHAIN_CONFIGS&currency=EUR&depart=2021-04-19&etabIdQS=18985&fday=18&fmonth=04&fyear=2021&hotel=68208&level=hotel&locale=en-US&rooms=1&shell=ResponsiveShared&start=availresults&tday=19&template=ResponsiveShared&tmonth=04&tyear=2021"
+        referer = generate_referer(date[:date], dates_plus_one_arr[index])
         response = HTTParty.post(url, 
             :body => body_request.to_json,
             :headers => { 
