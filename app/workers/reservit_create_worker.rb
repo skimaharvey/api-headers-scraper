@@ -41,7 +41,7 @@ class ReservitCreateWorker
     urls.each_with_index{|url, index|
     # begin
         random_proxy = proxies.sample
-        HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
+        HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.proxy_pass)
         @current_url = url
         response = HTTParty.get(url, 
         :headers => { 'Accept' =>  'application/json',

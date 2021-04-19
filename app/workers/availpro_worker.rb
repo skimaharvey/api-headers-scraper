@@ -93,7 +93,7 @@ class AvailproWorker
         times_retried = 0
         begin
         random_proxy = proxies.sample
-        HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
+        HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.proxy_pass)
         
         response = HTTParty.post(url, 
             :body => { :checkinDate => date[:date], 

@@ -24,7 +24,7 @@ def perform(hotel_id)
     eur_usd_rate = exchange["rates"]["USD"]
     print(eur_usd_rate)
     proxies = Proxy.all 
-    
+
     all_dates.each{|dateObj|
         max_retries = 3
         times_retried = 0
@@ -38,7 +38,7 @@ def perform(hotel_id)
             while !complete_response && counter < 5
 
                 random_proxy = proxies.sample
-                HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
+                HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.proxy_pass)
 
                 puts("fetching availabilities for: #{dateObj.date.to_s}, hotel_id: #{hotel_id}")
                 # puts(formatted_request_body)

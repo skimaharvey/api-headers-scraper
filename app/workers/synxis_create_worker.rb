@@ -47,7 +47,7 @@ class SynxisCreateWorker
         begin 
         sleep (1..6).to_a.sample
         random_proxy = proxies.sample
-        HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.user_pass)
+        HTTParty::Basement.http_proxy(random_proxy.proxy_body, random_proxy.port, random_proxy.username, random_proxy.proxy_pass)
         response = HTTParty.post(url, 
             :body => body_request.to_json,
             :headers => { 'Content-Type' =>  'application/json;charset=UTF-8',
