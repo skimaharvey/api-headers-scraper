@@ -10,7 +10,7 @@ class AvailproWorker
   end
 
   def check_last_scraping_differences(new_scraping_id, hotel_id)
-    last_scraping_session = ScrapingSession.where(hotel_id: hotel_id, is_complete: true).where.not(id: new_scraping_id).sort_by(&:created_at).last    
+    last_scraping_session = ScrapingSession.where(hotel_id: hotel_id, is_complete: true).where.not(id: new_scraping_id).sort_by(&:created_at)   
     if last_scraping_session.length > 0 
         @last_scraping_session_id = last_scraping_session.last.id
     end

@@ -10,7 +10,7 @@ class SynxisWorker
   #TODO CREATE TWO OBJECTS AND COMPARE TO SEE WHAT ARE THE NEW RESERVATION ETC...
 
   def check_last_scraping_differences(new_scraping_id, hotel_id)
-    last_scraping_session = ScrapingSession.where(hotel_id: hotel_id, is_complete: true).where.not(id: new_scraping_id).sort_by(&:created_at).last    
+    last_scraping_session = ScrapingSession.where(hotel_id: hotel_id, is_complete: true).where.not(id: new_scraping_id).sort_by(&:created_at)    
     if last_scraping_session.length > 0 
       @last_scraping_session_id = last_scraping_session.last.id
     end
@@ -196,7 +196,7 @@ class SynxisWorker
         if times_retried < max_retries
           times_retried += 1
           puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}, proxy: #{random_proxy}, cookie: #{synxis_cookie}"
-          puts "response headers: #{response.headers}"
+          # puts "response headers: #{response.headers}"
           puts "--------------"
           puts "response: #{response}"
           puts "-----------"
