@@ -10,8 +10,7 @@ class SynxisWorker
   #TODO CREATE TWO OBJECTS AND COMPARE TO SEE WHAT ARE THE NEW RESERVATION ETC...
 
   def check_last_scraping_differences(new_scraping_id, hotel_id)
-    last_scraping_session = ScrapingSession.where(hotel_id: hotel_id, is_complete: true).sort_by(&:created_at).where.not(id: new_scraping_id)
-    if last_scraping_session.length > 0 
+      last_scraping_session = ScrapingSession.where(hotel_id: hotel_id, is_complete: true).where.not(id: new_scraping_id).sort_by(&:created_at).last    if last_scraping_session.length > 0 
         @last_scraping_session_id = last_scraping_session.last.id
     end
     all_prices = Price.where(scraping_session_id: @last_scraping_session_id)
