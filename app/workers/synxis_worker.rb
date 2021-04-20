@@ -31,7 +31,8 @@ class SynxisWorker
                     room_category_id: @last_prices_objs[date_roomid][:room_category_id],
                     date_of_price_id: @last_prices_objs[date_roomid][:date_of_price_id],
                     price: @last_prices_objs[date_roomid][:price]? @last_prices_objs[date_roomid][:price] : @new_prices_objs[date_roomid][:price],
-                    n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_objs[date_roomid][:n_of_units_available]
+                    n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_objs[date_roomid][:n_of_units_available],
+                    scraping_session_id: new_scraping_id, scraping_comparaison_id:  @last_scraping_session_id
                 )
             end
             #change in price 
@@ -194,7 +195,7 @@ class SynxisWorker
       rescue => error
         if times_retried < max_retries
           times_retried += 1
-          puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}, proxy: #{new_proxy}, cookie: #{synxis_cookie}"
+          puts "Failed to <do the thing>, retry #{times_retried}/#{max_retries}, proxy: #{random_proxy}, cookie: #{synxis_cookie}"
           puts "response headers: #{response.headers}"
           puts "--------------"
           puts "response: #{response}"

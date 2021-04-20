@@ -39,7 +39,7 @@ class ReservitWorker
                         date_of_price_id: @last_prices_objs[date_roomid][:date_of_price_id],
                         price: @last_prices_objs[date_roomid][:price]? @last_prices_objs[date_roomid][:price] : @new_prices_objs[date_roomid][:price],
                         n_units: @last_prices_objs[date_roomid][:n_of_units_available] - @new_prices_objs[date_roomid][:n_of_units_available],
-                        scraping_session_id: new_scraping_id, scraping_comparaison_id:  last_scraping_session_id
+                        scraping_session_id: new_scraping_id, scraping_comparaison_id:  @last_scraping_session_id
                     )
                 end
                 #change in price 
