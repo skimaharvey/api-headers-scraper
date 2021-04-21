@@ -146,7 +146,7 @@ class AvailproWorker
             end
         end
     }
-    check_last_scraping_differences(scraping_session, hotel_id)
+    check_last_scraping_differences(scraping_session.id, hotel_id)
     scraping_session.update(is_complete: true)
     send_scraping_session_to_client(hotel_id)
   end 
