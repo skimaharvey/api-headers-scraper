@@ -8,6 +8,7 @@ class ChangesController < ApplicationController
         all_reservations = []
         all_prices_changes = []
 
+        
         all_hotels_ids.each{|hotel_id|
             hotel_reservations = NewReservation.where(hotel_id: hotel_id, created_at: 7.days.ago..Date.tomorrow)
             hotel_reservations.each{|reservation| all_reservations.push(reservation)}
